@@ -1,0 +1,193 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if result %}Update{% else %}Create{% endif %} Result | EduTrack Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+        }
+        .input-focus:focus {
+            border-color: #6b73ff;
+            box-shadow: 0 0 0 3px rgba(107, 115, 255, 0.2);
+        }
+        .hover-scale {
+            transition: transform 0.2s ease;
+        }
+        .hover-scale:hover {
+            transform: translateY(-2px);
+        }
+        .floating-label {
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background: white;
+            padding: 0 5px;
+            font-size: 12px;
+            color: #6b73ff;
+            font-weight: 500;
+        }
+        .form-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8 bg-white rounded-xl shadow-lg overflow-hidden">
+            <!-- Form Header -->
+            <div class="gradient-bg py-6 px-8 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold">
+                            <i class="fas fa-clipboard-list mr-2"></i>
+                            {% if result %}Update{% else %}Create New{% endif %} Result
+                        </h2>
+                        <p class="text-blue-100 mt-1">
+                            {% if result %}
+                                Edit existing student performance record
+                            {% else %}
+                                Add a new student examination result
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 p-3 rounded-full">
+                        <i class="fas fa-graduation-cap text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Content -->
+            <div class="px-8 py-6">
+                <form method="post" class="mt-4 space-y-6">
+                    {% csrf_token %}
+                    
+                    <!-- Student Selection -->
+                    <div class="form-group">
+                        <div class="relative">
+                            <select name="student" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 input-focus appearance-none" required>
+                                <option value="" disabled selected>Select a student</option>
+                                {% for student in students %}
+                                    <option value="{{ student.id }}" {% if result and result.student.id == student.id %}selected{% endif %}>
+                                        {{ student.name }} (ID: {{ student.id|stringformat:"04d" }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+                        <span class="floating-label">Student</span>
+                    </div>
+
+                    <!-- Exam Name -->
+                    <div class="form-group">
+                        <input type="text" name="exam_name" value="{{ result.exam_name|default:'' }}" 
+                               class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 input-focus" 
+                               placeholder=" " required>
+                        <span class="floating-label">Exam Name</span>
+                    </div>
+
+                    <!-- Marks Section -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <input type="number" name="marks_obtained" value="{{ result.marks_obtained|default:'' }}" 
+                                   class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 input-focus" 
+                                   placeholder=" " min="0" required>
+                            <span class="floating-label">Marks Obtained</span>
+                        </div>
+                        <div class="form-group">
+                            <input type="number" name="total_marks" value="50" readonly
+                                   class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 input-focus" 
+                                   placeholder=" " required>
+                            <span class="floating-label">Total Marks</span>
+                        </div>
+                    </div>
+
+                    <!-- Result Date -->
+                    <div class="form-group">
+                        <div class="relative">
+                            <input type="date" name="result_date" value="{{ result.result_date|date:'Y-m-d' }}" 
+                                   class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 input-focus appearance-none" required>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                        </div>
+                        <span class="floating-label">Result Date</span>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="flex justify-between pt-4">
+                        <a href="{% url 'result_list' %}" class="flex items-center justify-center px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition hover-scale">
+                            <i class="fas fa-arrow-left mr-2"></i> Cancel
+                        </a>
+                        <button type="submit" class="gradient-bg text-white px-6 py-3 rounded-lg hover:opacity-90 transition flex items-center hover-scale">
+                            {% if result %}
+                                <i class="fas fa-save mr-2"></i> Update Result
+                            {% else %}
+                                <i class="fas fa-plus mr-2"></i> Create Result
+                            {% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Form Footer -->
+            <div class="bg-gray-50 px-8 py-4 border-t border-gray-200">
+                <div class="flex items-center justify-between text-sm text-gray-500">
+                    <div>
+                        <i class="fas fa-info-circle mr-1"></i>
+                        All fields are required
+                    </div>
+                    <div>
+                        <i class="fas fa-shield-alt mr-1"></i>
+                        Secure form submission
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add floating label functionality
+        document.querySelectorAll('input, select').forEach(element => {
+            // Check if element has value on page load
+            if (element.value) {
+                element.previousElementSibling.style.display = 'block';
+            }
+            
+            // Add event listeners
+            element.addEventListener('focus', function() {
+                this.previousElementSibling.style.display = 'block';
+            });
+            
+            element.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.previousElementSibling.style.display = 'none';
+                }
+            });
+        });
+
+        // Calculate percentage in real-time
+        const marksObtainedInput = document.querySelector('input[name="marks_obtained"]');
+        const totalMarksInput = document.querySelector('input[name="total_marks"]');
+        
+        if (marksObtainedInput && totalMarksInput) {
+            [marksObtainedInput, totalMarksInput].forEach(input => {
+                input.addEventListener('input', function() {
+                    if (marksObtainedInput.value && totalMarksInput.value) {
+                        const percentage = (parseFloat(marksObtainedInput.value) / parseFloat(totalMarksInput.value)) * 100;
+                        console.log(`Percentage: ${percentage.toFixed(1)}%`);
+                        // You could display this to the user if you want
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>

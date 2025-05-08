@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gray-50">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if fee %}Update{% else %}Add{% endif %} Fee | EduPay</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#3b82f6',
+              600: '#2563eb',
+            },
+            success: {
+              500: '#22c55e',
+            }
+          },
+          boxShadow: {
+            'card': '0 4px 20px rgba(0,0,0,0.05)'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="h-full font-sans antialiased">
+  <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+      <div class="text-center">
+        <div class="mx-auto h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+          <i class="fas fa-wallet text-blue-600 text-xl"></i>
+        </div>
+        <h2 class="mt-2 text-3xl font-extrabold text-gray-900">
+          {% if fee %}Update{% else %}Add New{% endif %} Fee Record
+        </h2>
+        <p class="mt-2 text-sm text-gray-600">
+          {% if fee %}
+            Update the payment details for this student
+          {% else %}
+            Record a new fee payment for a student
+          {% endif %}
+        </p>
+      </div>
+
+      <div class="bg-white py-8 px-6 shadow-card rounded-lg sm:px-10">
+        <form class="mb-0 space-y-6" method="post">
+          {% csrf_token %}
+          
+          <div>
+            <label for="student" class="block text-sm font-medium text-gray-700">Student</label>
+            <div class="mt-1 relative rounded-md shadow-sm">
+              <select id="student" name="student" required
+                class="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                <option value="">Select Student</option>
+                {% for student in students %}
+                <option value="{{ student.id }}"
+                  {% if fee and fee.student.id == student.id %}selected{% endif %}>
+                  {{ student.name }} ({{ student.roll_no }})
+                </option>
+                {% endfor %}
+              </select>
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label for="total_fee" class="block text-sm font-medium text-gray-700">Total Fee (₹)</label>
+            <div class="mt-1 relative rounded-md shadow-sm">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span class="text-gray-500 sm:text-sm">₹</span>
+              </div>
+              <input type="number" id="total_fee" name="total_fee" value="{{ fee.total_fee|default:0 }}" step="0.01" required
+                class="block w-full pl-12 pr-12 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="0.00">
+              <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                <span class="text-gray-500 sm:text-sm">.00</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label for="amount_paid" class="block text-sm font-medium text-gray-700">Amount Paid (₹)</label>
+            <div class="mt-1 relative rounded-md shadow-sm">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span class="text-gray-500 sm:text-sm">₹</span>
+              </div>
+              <input type="number" id="amount_paid" name="amount_paid" value="{{ fee.amount_paid|default:0 }}" step="0.01" required
+                class="block w-full pl-12 pr-12 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="0.00">
+              <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                <span class="text-gray-500 sm:text-sm">.00</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center">
+            <input type="checkbox" id="is_paid" name="is_paid" {% if fee and fee.is_paid %}checked{% endif %}
+              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+            <label for="is_paid" class="ml-2 block text-sm text-gray-700">
+              Mark as fully paid
+            </label>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <a href="{% url 'fee_list' %}" class="text-sm font-medium text-blue-600 hover:text-blue-500">
+              <i class="fas fa-arrow-left mr-1"></i> Back to list
+            </a>
+            <button type="submit"
+              class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+              <i class="fas fa-save mr-1"></i> {% if fee %}Update{% else %}Save{% endif %} Record
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Auto-check "is_paid" if amount paid equals total fee
+    const amountPaidInput = document.getElementById('amount_paid');
+    const totalFeeInput = document.getElementById('total_fee');
+    const isPaidCheckbox = document.getElementById('is_paid');
+
+    function checkPaymentStatus() {
+      const amountPaid = parseFloat(amountPaidInput.value) || 0;
+      const totalFee = parseFloat(totalFeeInput.value) || 0;
+      
+      if (amountPaid >= totalFee && totalFee > 0) {
+        isPaidCheckbox.checked = true;
+      } else {
+        isPaidCheckbox.checked = false;
+      }
+    }
+
+    amountPaidInput.addEventListener('input', checkPaymentStatus);
+    totalFeeInput.addEventListener('input', checkPaymentStatus);
+  </script>
+</body>
+</html>

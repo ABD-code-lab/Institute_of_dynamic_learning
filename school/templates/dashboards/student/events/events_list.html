@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Dashboard | TechSphere</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        tech: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        cyber: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            200: '#ddd6fe',
+                            300: '#c4b5fd',
+                            400: '#a78bfa',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                            800: '#5b21b6',
+                            900: '#4c1d95',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .event-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.98) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+        .event-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+            border-color: rgba(226, 232, 240, 0.8);
+        }
+        .tech-badge {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(2, 132, 199, 0.1) 100%);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+        }
+        .cyber-badge {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        .glow-effect {
+            position: relative;
+        }
+        .glow-effect::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: inherit;
+            background: radial-gradient(circle at center, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .glow-effect:hover::after {
+            opacity: 1;
+        }
+        .empty-state {
+            background: linear-gradient(135deg, rgba(241, 245, 249, 0.8) 0%, rgba(226, 232, 240, 0.8) 100%);
+            border: 2px dashed rgba(148, 163, 184, 0.3);
+        }
+    </style>
+</head>
+<body class="py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Event Dashboard</h1>
+                <p class="text-gray-500 mt-2">Manage and track all your tech events in one place</p>
+            </div>
+            <div class="flex space-x-3">
+                <a href='/student-dashboard' class="flex items-center justify-center px-4 py-3 bg-white text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm border border-gray-200">
+                    Back to dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">Total Events</p>
+                        <h3 class="text-2xl font-bold text-gray-900 mt-1">{{ events|length }}</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-tech-50 flex items-center justify-center">
+                        <i class="fas fa-calendar text-tech-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">Upcoming</p>
+                        <h3 class="text-2xl font-bold text-gray-900 mt-1">{{ upcoming_count }}</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center">
+                        <i class="fas fa-clock text-amber-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">Past Events</p>
+                        <h3 class="text-2xl font-bold text-gray-900 mt-1">{{ past_count }}</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center">
+                        <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Events List -->
+        <div class="space-y-4">
+            {% for event in events %}
+                <div class="event-card p-6 animate-fade-in">
+                    <div class="flex flex-col md:flex-row md:items-start gap-5">
+                        <!-- Event Date -->
+                        <div class="flex-shrink-0 w-20 h-20 rounded-lg bg-tech-50 flex flex-col items-center justify-center border border-tech-100">
+                            <span class="text-2xl font-bold text-tech-600">{{ event.start_date|date:"d" }}</span>
+                            <span class="text-xs font-medium text-tech-500 uppercase">{{ event.start_date|date:"M" }}</span>
+                        </div>
+                        
+                        <!-- Event Details -->
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between gap-3">
+                                <div>
+                                    <h2 class="text-xl font-bold text-gray-900 mb-1">{{ event.title }}</h2>
+                                    <div class="flex flex-wrap items-center gap-2 mt-2">
+                                        <span class="tech-badge px-3 py-1 rounded-full text-xs font-medium text-tech-700 flex items-center">
+                                            <i class="fas fa-map-marker-alt mr-1.5 text-tech-500"></i>
+                                            {{ event.location }}
+                                        </span>
+                                        <span class="cyber-badge px-3 py-1 rounded-full text-xs font-medium text-cyber-700 flex items-center">
+                                            <i class="fas fa-clock mr-1.5 text-cyber-500"></i>
+                                            {{ event.start_date|date:"H:i A" }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <p class="text-gray-600 mt-3 line-clamp-2">{{ event.description }}</p>
+                            
+                            <div class="mt-4 flex items-center justify-between">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="empty-state p-10 rounded-xl text-center">
+                    <div class="w-20 h-20 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center text-gray-400">
+                        <i class="fas fa-calendar-times text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-medium text-gray-700 mb-2">No events scheduled</h3>
+                    <p class="text-gray-500 mb-4">Create your first event to get started</p>
+                    <a href="{% url 'event_create' %}" class="inline-flex items-center px-4 py-2 bg-tech-600 text-white font-medium rounded-lg hover:bg-tech-700 transition-colors">
+                        <i class="fas fa-plus mr-2"></i> Create Event
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <div class="mt-10 flex items-center justify-between">
+            <div class="text-sm text-gray-500">
+                Showing page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </div>
+            <div class="flex space-x-2">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                        Previous
+                    </a>
+                {% endif %}
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                        Next
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

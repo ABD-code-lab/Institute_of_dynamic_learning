@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Deletion | EduTrack Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            animation: fadeIn 0.3s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, #f85032 0%, #e73827 100%);
+        }
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #e73827 0%, #f85032 100%);
+        }
+        .hover-scale {
+            transition: transform 0.2s ease;
+        }
+        .hover-scale:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Modal Overlay -->
+    <div class="fixed inset-0 z-50 flex items-center justify-center modal-overlay">
+        <!-- Modal Content -->
+        <div class="modal-content bg-white rounded-xl shadow-xl overflow-hidden w-full max-w-md mx-4">
+            <!-- Modal Header -->
+            <div class="bg-red-50 py-5 px-6 border-b border-red-100">
+                <div class="flex items-center justify-center">
+                    <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                        <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="px-6 py-5">
+                <div class="text-center">
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Delete Result Record</h3>
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-500">
+                            Are you sure you want to permanently delete this result?
+                        </p>
+                        <div class="mt-4 bg-gray-50 p-4 rounded-lg border border-gray-200 text-left">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-user-graduate text-gray-500 mr-2"></i>
+                                <span class="font-medium">{{ result.student.name }}</span>
+                            </div>
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-clipboard-list text-gray-500 mr-2"></i>
+                                <span>{{ result.exam_name }}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-chart-line text-gray-500 mr-2"></i>
+                                <span>{{ result.marks_obtained }}/{{ result.total_marks }} ({{ result.percentage|floatformat:1 }}%)</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-red-500 mt-3">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            This action cannot be undone.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="bg-gray-50 px-6 py-4 flex justify-between">
+                <a href="{% url 'result_list' %}" class="hover-scale inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <i class="fas fa-times mr-2"></i> Cancel
+                </a>
+                <form method="post" class="inline-block">
+                    {% csrf_token %}
+                    <button type="submit" class="hover-scale btn-danger inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                        <i class="fas fa-trash-alt mr-2"></i> Delete Permanently
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add animation when cancelling
+        document.querySelector('a[href="{% url 'result_list' %}"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector('.modal-content').style.animation = 'fadeIn 0.3s ease-out reverse';
+            setTimeout(() => {
+                window.location.href = this.href;
+            }, 250);
+        });
+    </script>
+</body>
+</html>

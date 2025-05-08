@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher Reviews</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header Section -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">Teacher Reviews</h1>
+                <p class="text-gray-600 mt-2">See what students are saying about their teachers</p>
+            </div>
+            <a href="/student-dashboard" class="mt-4 md:mt-0 inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition duration-200 shadow-lg">
+                Back to dashboard
+            </a>
+            <a href="{% url 'add_review' %}" class="mt-4 md:mt-0 inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition duration-200 shadow-lg">
+                <i class="fas fa-plus mr-2"></i> Add New Review
+            </a>
+        </div>
+
+        <!-- Reviews List -->
+        {% if reviews %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for review in reviews %}
+            <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition duration-300">
+                <div class="p-6">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xl font-semibold text-gray-800">{{ review.teacher_name }}</h3>
+                        <div class="flex items-center bg-indigo-100 px-3 py-1 rounded-full">
+                            <span class="text-indigo-800 font-medium mr-1">{{ review.rating }}</span>
+                            <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 mb-5">
+                        <div class="flex mb-2">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= review.rating %}
+                                    <i class="fas fa-star text-yellow-400 mr-1"></i>
+                                {% else %}
+                                    <i class="far fa-star text-yellow-400 mr-1"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <p class="text-gray-600">{{ review.comment }}</p>
+                    </div>
+                    
+                    <div class="flex space-x-3 border-t pt-4">
+                        <a href="{% url 'edit_review' review.pk %}" class="text-indigo-600 hover:text-indigo-800 flex items-center">
+                            <i class="fas fa-edit mr-1"></i> Edit
+                        </a>
+                        <a href="{% url 'delete_review' review.pk %}" class="text-red-600 hover:text-red-800 flex items-center">
+                            <i class="fas fa-trash-alt mr-1"></i> Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="bg-white rounded-xl shadow-sm p-8 text-center">
+            <i class="fas fa-comment-slash text-4xl text-gray-300 mb-4"></i>
+            <h3 class="text-xl font-medium text-gray-700">No reviews yet</h3>
+            <p class="text-gray-500 mt-2">Be the first to share your experience!</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

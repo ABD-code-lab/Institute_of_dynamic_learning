@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Page</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              200: '#bbf7d0',
+              300: '#86efac',
+              400: '#4ade80',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    }
+    .form-container {
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    .input-field {
+      transition: all 0.3s ease;
+    }
+    .input-field:focus {
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.3);
+    }
+    .role-select {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.5rem center;
+      background-repeat: no-repeat;
+      background-size: 1.5em 1.5em;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+  <div class="form-container bg-white rounded-xl p-8 w-[40%]">
+    <div class="text-center mb-8">
+      <div class="mx-auto w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mb-4">
+        <i class="fas fa-user-graduate text-primary-600 text-2xl"></i>
+      </div>
+      <h2 class="text-3xl font-bold text-gray-800">Create Account</h2>
+      <p class="text-gray-500 mt-2">Join our education community today</p>
+    </div>
+
+    {% if error %}
+      <div class="mb-6 p-4 bg-red-50 text-red-700 rounded-lg flex items-start">
+        <i class="fas fa-exclamation-circle mt-1 mr-3"></i>
+        <div>{{ error }}</div>
+      </div>
+    {% endif %}
+
+    <form method="post" class="space-y-5">
+      {% csrf_token %}
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+        <div class="relative">
+          <input name="username" type="text" required 
+                 class="input-field w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder-gray-400"
+                 placeholder="Enter your username" autocomplete='off'>
+          <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+            <i class="fas fa-user text-gray-400"></i>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+        <div class="relative">
+          <input name="password" id="password" type="password" required 
+                 class="input-field w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder-gray-400"
+                 placeholder="Create a password">
+          <button type="button" onclick="togglePassword()" 
+                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+            <i id="eyeIcon" class="fas fa-eye-slash"></i>
+          </button>
+        </div>
+        <div class="mt-2 text-xs text-gray-500">
+          <p class="flex items-center"><i class="fas fa-info-circle mr-1"></i> Minimum 8 characters</p>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+        <select name="role" class="role-select w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none">
+          <option value="admin">Administrator</option>
+          <option value="teacher">Teacher</option>
+          <option value="student" selected>Student</option>
+        </select>
+      </div>
+
+      <button type="submit" class="w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition duration-200 flex items-center justify-center">
+        <span>Sign Up</span>
+        <i class="fas fa-arrow-right ml-2"></i>
+      </button>
+    </form>
+
+    <div class="mt-6 text-center text-sm text-gray-500">
+      <p>Already have an account? 
+        <a href="{% url 'login' %}" class="font-medium text-primary-600 hover:text-primary-500 hover:underline">Log in</a>
+      </p>
+    </div>
+
+    <div class="mt-8 border-t border-gray-100 pt-6">
+      <p class="text-xs text-gray-500 text-center">By signing up, you agree to our <a href="#" class="text-primary-600 hover:underline">Terms</a> and <a href="#" class="text-primary-600 hover:underline">Privacy Policy</a>.</p>
+    </div>
+  </div>
+
+  <script>
+    function togglePassword() {
+      const passwordInput = document.getElementById('password');
+      const eyeIcon = document.getElementById('eyeIcon');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.classList.replace('fa-eye-slash', 'fa-eye');
+      } else {
+        passwordInput.type = 'password';
+        eyeIcon.classList.replace('fa-eye', 'fa-eye-slash');
+      }
+    }
+  </script>
+</body>
+</html>

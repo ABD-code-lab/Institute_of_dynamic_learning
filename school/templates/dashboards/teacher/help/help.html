@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help Center | Teacher Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#3b82f6',
+              600: '#2563eb',
+            },
+            dark: {
+              800: '#1e293b',
+              900: '#0f172a',
+            }
+          },
+          boxShadow: {
+            'card': '0 4px 20px rgba(0,0,0,0.05)',
+            'float': '0 10px 25px -5px rgba(0,0,0,0.1)'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="h-full bg-gray-50 font-sans antialiased">
+  <!-- Header with gradient -->
+  <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+        <div class="mb-6 md:mb-0">
+          <h1 class="text-3xl font-bold">Help Center</h1>
+          <p class="mt-2 text-blue-100">Find answers, guides and tutorials for the Teacher Dashboard</p>
+        </div>
+        <div class="relative w-full md:w-96">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <i class="fas fa-search text-gray-400"></i>
+          </div>
+          <input type="text" id="helpSearch" class="block w-full pl-10 pr-3 py-3 border border-transparent rounded-lg bg-blue-500 bg-opacity-20 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent" placeholder="Search help articles...">
+          <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+            <span class="hidden sm:inline-block bg-blue-500 text-white text-xs px-2 py-1 rounded">Ctrl + /</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Quick Help Cards -->
+    <section class="mb-12">
+      <h2 class="text-xl font-semibold text-gray-800 mb-6">Quick Help</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <a href="#attendance" class="bg-white rounded-xl shadow-card p-6 hover:shadow-md transition-shadow duration-200 border-l-4 border-blue-500 group">
+          <div class="flex items-center mb-4">
+            <div class="bg-blue-100 p-3 rounded-lg mr-4 group-hover:bg-blue-200 transition-colors duration-200">
+              <i class="fas fa-clipboard-check text-blue-600 text-xl"></i>
+            </div>
+            <h3 class="font-medium text-gray-800">Attendance</h3>
+          </div>
+          <p class="text-gray-600 text-sm">Learn how to mark and manage student attendance</p>
+        </a>
+        
+        <a href="#grades" class="bg-white rounded-xl shadow-card p-6 hover:shadow-md transition-shadow duration-200 border-l-4 border-purple-500 group">
+          <div class="flex items-center mb-4">
+            <div class="bg-purple-100 p-3 rounded-lg mr-4 group-hover:bg-purple-200 transition-colors duration-200">
+              <i class="fas fa-star text-purple-600 text-xl"></i>
+            </div>
+            <h3 class="font-medium text-gray-800">Gradebook</h3>
+          </div>
+          <p class="text-gray-600 text-sm">Enter and manage student grades effectively</p>
+        </a>
+        
+        <a href="#reports" class="bg-white rounded-xl shadow-card p-6 hover:shadow-md transition-shadow duration-200 border-l-4 border-green-500 group">
+          <div class="flex items-center mb-4">
+            <div class="bg-green-100 p-3 rounded-lg mr-4 group-hover:bg-green-200 transition-colors duration-200">
+              <i class="fas fa-chart-bar text-green-600 text-xl"></i>
+            </div>
+            <h3 class="font-medium text-gray-800">Reports</h3>
+          </div>
+          <p class="text-gray-600 text-sm">Generate and analyze student performance reports</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- Knowledge Base -->
+    <section class="mb-12">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-semibold text-gray-800">Knowledge Base</h2>
+        <div class="flex space-x-2">
+          <button class="px-3 py-1 text-sm bg-blue-600 text-white rounded-md">All Topics</button>
+          <button class="px-3 py-1 text-sm bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50">Getting Started</button>
+          <button class="px-3 py-1 text-sm bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50">Features</button>
+          <button class="px-3 py-1 text-sm bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50">Troubleshooting</button>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-xl shadow-card overflow-hidden">
+        <!-- FAQ Accordion -->
+        <div class="divide-y divide-gray-200">
+          <!-- FAQ Item 1 -->
+          <div class="faq-item">
+            <button class="w-full px-6 py-4 text-left flex items-center justify-between focus:outline-none">
+              <span class="font-medium text-gray-800">How do I set up my class roster?</span>
+              <i class="fas fa-chevron-down text-gray-400 transform transition-transform duration-200"></i>
+            </button>
+            <div class="px-6 pb-4 hidden">
+              <div class="prose prose-sm text-gray-600 max-w-none">
+                <p>To set up your class roster:</p>
+                <ol class="list-decimal pl-5 space-y-1">
+                  <li>Navigate to the "Classes" section in your dashboard</li>
+                  <li>Click "Create New Class" or select an existing class</li>
+                  <li>Use the "Add Students" button to search for and add students</li>
+                  <li>You can import students via CSV for bulk additions</li>
+                  <li>Save your changes when complete</li>
+                </ol>
+                <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
+                  <p class="font-medium text-blue-800 flex items-center">
+                    <i class="fas fa-lightbulb mr-2"></i> Pro Tip
+                  </p>
+                  <p class="text-blue-700 mt-1">Use the student ID numbers for quick identification when managing large classes.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- FAQ Item 2 -->
+          <div class="faq-item">
+            <button class="w-full px-6 py-4 text-left flex items-center justify-between focus:outline-none">
+              <span class="font-medium text-gray-800">How can I customize grade calculations?</span>
+              <i class="fas fa-chevron-down text-gray-400 transform transition-transform duration-200"></i>
+            </button>
+            <div class="px-6 pb-4 hidden">
+              <div class="prose prose-sm text-gray-600 max-w-none">
+                <p>The gradebook allows multiple customization options:</p>
+                <ul class="list-disc pl-5 space-y-1">
+                  <li>Weighted categories (tests, homework, participation)</li>
+                  <li>Curved grading scales</li>
+                  <li>Dropping lowest scores</li>
+                  <li>Extra credit assignments</li>
+                </ul>
+                <div class="mt-4">
+                  <p class="font-medium">To access these settings:</p>
+                  <p>Go to Gradebook → Settings → Grading Rules</p>
+                </div>
+                <div class="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-100">
+                  <p class="font-medium text-yellow-800 flex items-center">
+                    <i class="fas fa-exclamation-triangle mr-2"></i> Important
+                  </p>
+                  <p class="text-yellow-700 mt-1">Changes to grading rules will affect all existing calculations. Review carefully before saving.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- FAQ Item 3 -->
+          <div class="faq-item">
+            <button class="w-full px-6 py-4 text-left flex items-center justify-between focus:outline-none">
+              <span class="font-medium text-gray-800">What should I do if I can't access my account?</span>
+              <i class="fas fa-chevron-down text-gray-400 transform transition-transform duration-200"></i>
+            </button>
+            <div class="px-6 pb-4 hidden">
+              <div class="prose prose-sm text-gray-600 max-w-none">
+                <p>If you're having trouble accessing your account:</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                  <div class="p-3 bg-gray-50 rounded-lg">
+                    <p class="font-medium">Forgot Password</p>
+                    <p class="text-sm mt-1">Use the "Forgot Password" link on the login page to reset your credentials.</p>
+                  </div>
+                  <div class="p-3 bg-gray-50 rounded-lg">
+                    <p class="font-medium">Account Locked</p>
+                    <p class="text-sm mt-1">After multiple failed attempts, wait 15 minutes or contact support.</p>
+                  </div>
+                  <div class="p-3 bg-gray-50 rounded-lg">
+                    <p class="font-medium">Browser Issues</p>
+                    <p class="text-sm mt-1">Try clearing cache/cookies or using a different browser.</p>
+                  </div>
+                  <div class="p-3 bg-gray-50 rounded-lg">
+                    <p class="font-medium">Still Need Help?</p>
+                    <p class="text-sm mt-1">Contact our 24/7 support team for immediate assistance.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Video Tutorials -->
+    <section class="mb-12" id="tutorials">
+      <h2 class="text-xl font-semibold text-gray-800 mb-6">Video Tutorials</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white rounded-xl shadow-card overflow-hidden hover:shadow-md transition-shadow duration-200">
+          <div class="relative pt-[56.25%] bg-gray-200">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <i class="fas fa-play text-4xl text-blue-600 opacity-80"></i>
+            </div>
+          </div>
+          <div class="p-5">
+            <h3 class="font-medium text-gray-800 mb-2">Dashboard Overview</h3>
+            <p class="text-sm text-gray-600 mb-3">Learn how to navigate the teacher dashboard</p>
+            <div class="flex items-center text-xs text-gray-500">
+              <span>5:32 min</span>
+              <span class="mx-2">•</span>
+              <span>Beginner</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-card overflow-hidden hover:shadow-md transition-shadow duration-200">
+          <div class="relative pt-[56.25%] bg-gray-200">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <i class="fas fa-play text-4xl text-blue-600 opacity-80"></i>
+            </div>
+          </div>
+          <div class="p-5">
+            <h3 class="font-medium text-gray-800 mb-2">Gradebook Setup</h3>
+            <p class="text-sm text-gray-600 mb-3">Complete guide to setting up your gradebook</p>
+            <div class="flex items-center text-xs text-gray-500">
+              <span>12:15 min</span>
+              <span class="mx-2">•</span>
+              <span>Intermediate</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-card overflow-hidden hover:shadow-md transition-shadow duration-200">
+          <div class="relative pt-[56.25%] bg-gray-200">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <i class="fas fa-play text-4xl text-blue-600 opacity-80"></i>
+            </div>
+          </div>
+          <div class="p-5">
+            <h3 class="font-medium text-gray-800 mb-2">Advanced Reporting</h3>
+            <p class="text-sm text-gray-600 mb-3">Create custom reports and analyze student data</p>
+            <div class="flex items-center text-xs text-gray-500">
+              <span>18:47 min</span>
+              <span class="mx-2">•</span>
+              <span>Advanced</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Support -->
+    <section id="contact">
+      <div class="bg-white rounded-xl shadow-card overflow-hidden">
+        <div class="md:flex">
+          <div class="md:w-1/2 bg-gradient-to-br from-blue-600 to-indigo-700 text-white p-8">
+            <h2 class="text-2xl font-bold mb-4">Still need help?</h2>
+            <p class="mb-6 text-blue-100">Our support team is ready to assist you with any questions or issues.</p>
+            <div class="space-y-4">
+              <div class="flex items-start">
+                <div class="flex-shrink-0 mt-1">
+                  <i class="fas fa-envelope text-blue-300"></i>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-blue-200">Email us at</p>
+                  <p class="text-white">support@teacherportal.com</p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <div class="flex-shrink-0 mt-1">
+                  <i class="fas fa-phone-alt text-blue-300"></i>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-blue-200">Call us</p>
+                  <p class="text-white">(800) 555-0199</p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <div class="flex-shrink-0 mt-1">
+                  <i class="fas fa-comment-alt text-blue-300"></i>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-blue-200">Live chat</p>
+                  <p class="text-white">Available 24/7</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="md:w-1/2 p-8">
+            <h3 class="text-lg font-medium text-gray-800 mb-4">Send us a message</h3>
+            <form class="space-y-4">
+              <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
+                <input type="text" id="name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+              </div>
+              <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                <input type="email" id="email" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+              </div>
+              <div>
+                <label for="subject" class="block text-sm font-medium text-gray-700">Subject</label>
+                <select id="subject" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                  <option>Select a topic</option>
+                  <option>Technical Issue</option>
+                  <option>Account Help</option>
+                  <option>Feature Request</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div>
+                <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+                <textarea id="message" rows="4" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+              </div>
+              <div class="flex justify-end">
+                <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                  Send Message
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Floating Help Button -->
+  <div class="fixed bottom-6 right-6">
+    <button class="flex items-center justify-center w-14 h-14 rounded-full bg-blue-600 text-white shadow-float hover:bg-blue-700 transition-colors group">
+      <i class="fas fa-question text-xl"></i>
+      <span class="absolute right-16 whitespace-nowrap bg-gray-800 text-white text-sm px-3 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">Need Help?</span>
+    </button>
+  </div>
+
+  <script>
+    // FAQ Accordion functionality
+    document.querySelectorAll('.faq-item button').forEach(button => {
+      button.addEventListener('click', () => {
+        const item = button.closest('.faq-item');
+        const content = item.querySelector('div');
+        const icon = button.querySelector('i');
+        
+        // Toggle content visibility
+        content.classList.toggle('hidden');
+        
+        // Rotate chevron icon
+        icon.classList.toggle('rotate-180');
+        
+        // Close other open items
+        document.querySelectorAll('.faq-item').forEach(otherItem => {
+          if (otherItem !== item) {
+            otherItem.querySelector('div').classList.add('hidden');
+            otherItem.querySelector('i').classList.remove('rotate-180');
+          }
+        });
+      });
+    });
+
+    // Search functionality
+    document.getElementById('helpSearch').addEventListener('input', function(e) {
+      const searchTerm = e.target.value.toLowerCase();
+      const faqItems = document.querySelectorAll('.faq-item');
+      
+      faqItems.forEach(item => {
+        const question = item.querySelector('button span').textContent.toLowerCase();
+        if (question.includes(searchTerm)) {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+
+    // Keyboard shortcut for search
+    document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey && e.key === '/') {
+        e.preventDefault();
+        document.getElementById('helpSearch').focus();
+      }
+    });
+  </script>
+</body>
+</html>

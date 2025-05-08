@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Digital Diary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-primary-600 to-primary-800 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold">Diary</h1>
+                <a href="/teacher-dashboard" class="bg-white text-primary-700 hover:bg-primary-50 px-4 py-2 rounded-lg font-semibold transition duration-300 flex items-center">
+                    Back to dashboard
+                </a>
+                <a href="{% url 'diary_create' %}" class="bg-white text-primary-700 hover:bg-primary-50 px-4 py-2 rounded-lg font-semibold transition duration-300 flex items-center">
+                    <i class="fas fa-plus-circle mr-2"></i> New Entry
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Diary Entries Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for diary in diaries %}
+            <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition duration-300">
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-2">
+                        <h2 class="text-xl font-bold text-gray-800 truncate">{{ diary.title }}</h2>
+                        <span class="bg-primary-100 text-primary-800 text-xs px-2 py-1 rounded-full">{{ diary.date|date:"M d, Y" }}</span>
+                    </div>
+                    <div class="text-gray-600 mb-4 line-clamp-3">
+                        {{ diary.content }}
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <a href="{% url 'diary_update' diary.pk %}" class="text-primary-600 hover:text-primary-800 transition duration-300" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{% url 'diary_delete' diary.pk %}" class="text-red-600 hover:text-red-800 transition duration-300" title="Delete">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-12">
+                <div class="mx-auto w-24 h-24 bg-primary-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-book-open text-primary-600 text-3xl"></i>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">No diary entries yet</h3>
+                <p class="text-gray-500 mb-4">Start your journaling journey by creating your first entry</p>
+                <a href="{% url 'diary_create' %}" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition duration-300">
+                    <i class="fas fa-plus-circle mr-2"></i> Create First Entry
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <!-- Floating Action Button for Mobile -->
+    <div class="md:hidden fixed bottom-6 right-6">
+        <a href="{% url 'diary_create' %}" class="w-14 h-14 bg-primary-600 rounded-full shadow-lg flex items-center justify-center text-white hover:bg-primary-700 transition duration-300">
+            <i class="fas fa-plus text-xl"></i>
+        </a>
+    </div>
+</body>
+</html>

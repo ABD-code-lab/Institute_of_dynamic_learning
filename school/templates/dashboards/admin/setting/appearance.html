@@ -1,0 +1,396 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Appearance Settings | Admin Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              600: '#0284c7',
+              700: '#0369a1',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
+  <div class="max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+      <div>
+        <h1 class="text-2xl font-bold">Appearance</h1>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Customize the look and feel of your dashboard</p>
+      </div>
+      <div class="mt-4 sm:mt-0 flex items-center space-x-3">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-100">
+          <i class="fas fa-paint-brush mr-2"></i> Customizing
+        </span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <!-- Sidebar Navigation -->
+      <div class="lg:col-span-3">
+        <nav class="space-y-1">
+          <a href="#" class="text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 group flex items-center px-4 py-3 text-sm font-medium rounded-lg border border-transparent">
+            <i class="fas fa-user-circle text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300 mr-3"></i>
+            Account
+          </a>
+          <a href="#" class="text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 group flex items-center px-4 py-3 text-sm font-medium rounded-lg border border-transparent">
+            <i class="fas fa-bell text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300 mr-3"></i>
+            Notifications
+          </a>
+          <a href="#" class="bg-primary-50 dark:bg-gray-800 text-primary-700 dark:text-primary-300 group flex items-center px-4 py-3 text-sm font-medium rounded-lg border border-primary-100 dark:border-gray-700">
+            <i class="fas fa-paint-brush text-primary-600 dark:text-primary-400 mr-3"></i>
+            Appearance
+          </a>
+          <a href="#" class="text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 group flex items-center px-4 py-3 text-sm font-medium rounded-lg border border-transparent">
+            <i class="fas fa-plug text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300 mr-3"></i>
+            Integrations
+          </a>
+        </nav>
+      </div>
+
+      <!-- Main Content -->
+      <div class="lg:col-span-9">
+        <!-- Theme Settings -->
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+            <h2 class="text-lg font-medium">Theme Preferences</h2>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Choose how your dashboard looks and feels.</p>
+          </div>
+          <form method="post" class="divide-y divide-gray-200 dark:divide-gray-700">
+            {% csrf_token %}
+            
+            <!-- Color Scheme -->
+            <div class="p-6 space-y-6">
+              <div>
+                <label class="block text-sm font-medium mb-3">Color Scheme</label>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <label class="relative cursor-pointer">
+                    <input type="radio" name="color-scheme" value="light" class="peer sr-only" checked>
+                    <div class="p-4 rounded-lg border-2 border-gray-200 peer-checked:border-primary-500 bg-white shadow-sm">
+                      <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium">Light Mode</span>
+                        <i class="fas fa-sun text-yellow-500"></i>
+                      </div>
+                      <div class="mt-3 grid grid-cols-3 gap-1">
+                        <div class="h-4 rounded bg-gray-100"></div>
+                        <div class="h-4 rounded bg-gray-200"></div>
+                        <div class="h-4 rounded bg-gray-300"></div>
+                      </div>
+                    </div>
+                    <div class="absolute top-2 right-2 hidden peer-checked:block">
+                      <div class="h-5 w-5 rounded-full bg-primary-500 flex items-center justify-center">
+                        <i class="fas fa-check text-white text-xs"></i>
+                      </div>
+                    </div>
+                  </label>
+
+                  <label class="relative cursor-pointer">
+                    <input type="radio" name="color-scheme" value="dark" class="peer sr-only">
+                    <div class="p-4 rounded-lg border-2 border-gray-200 peer-checked:border-primary-500 bg-gray-900 shadow-sm">
+                      <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-white">Dark Mode</span>
+                        <i class="fas fa-moon text-indigo-300"></i>
+                      </div>
+                      <div class="mt-3 grid grid-cols-3 gap-1">
+                        <div class="h-4 rounded bg-gray-800"></div>
+                        <div class="h-4 rounded bg-gray-700"></div>
+                        <div class="h-4 rounded bg-gray-600"></div>
+                      </div>
+                    </div>
+                    <div class="absolute top-2 right-2 hidden peer-checked:block">
+                      <div class="h-5 w-5 rounded-full bg-primary-500 flex items-center justify-center">
+                        <i class="fas fa-check text-white text-xs"></i>
+                      </div>
+                    </div>
+                  </label>
+
+                  <label class="relative cursor-pointer">
+                    <input type="radio" name="color-scheme" value="system" class="peer sr-only">
+                    <div class="p-4 rounded-lg border-2 border-gray-200 peer-checked:border-primary-500 bg-gradient-to-b from-white to-gray-900 shadow-sm">
+                      <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium">System</span>
+                        <i class="fas fa-desktop text-gray-500"></i>
+                      </div>
+                      <div class="mt-3 grid grid-cols-3 gap-1">
+                        <div class="h-4 rounded bg-gray-100"></div>
+                        <div class="h-4 rounded bg-gray-400"></div>
+                        <div class="h-4 rounded bg-gray-700"></div>
+                      </div>
+                    </div>
+                    <div class="absolute top-2 right-2 hidden peer-checked:block">
+                      <div class="h-5 w-5 rounded-full bg-primary-500 flex items-center justify-center">
+                        <i class="fas fa-check text-white text-xs"></i>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Accent Color -->
+              <div>
+                <label class="block text-sm font-medium mb-3">Accent Color</label>
+                <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
+                  <label class="relative">
+                    <input type="radio" name="accent-color" value="blue" class="peer sr-only" checked>
+                    <div class="h-10 w-full rounded-lg bg-blue-500 peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-blue-500"></div>
+                    <div class="absolute top-1 right-1 hidden peer-checked:block">
+                      <i class="fas fa-check text-white text-xs"></i>
+                    </div>
+                  </label>
+                  <label class="relative">
+                    <input type="radio" name="accent-color" value="indigo" class="peer sr-only">
+                    <div class="h-10 w-full rounded-lg bg-indigo-500 peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-indigo-500"></div>
+                    <div class="absolute top-1 right-1 hidden peer-checked:block">
+                      <i class="fas fa-check text-white text-xs"></i>
+                    </div>
+                  </label>
+                  <label class="relative">
+                    <input type="radio" name="accent-color" value="purple" class="peer sr-only">
+                    <div class="h-10 w-full rounded-lg bg-purple-500 peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-purple-500"></div>
+                    <div class="absolute top-1 right-1 hidden peer-checked:block">
+                      <i class="fas fa-check text-white text-xs"></i>
+                    </div>
+                  </label>
+                  <label class="relative">
+                    <input type="radio" name="accent-color" value="pink" class="peer sr-only">
+                    <div class="h-10 w-full rounded-lg bg-pink-500 peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-pink-500"></div>
+                    <div class="absolute top-1 right-1 hidden peer-checked:block">
+                      <i class="fas fa-check text-white text-xs"></i>
+                    </div>
+                  </label>
+                  <label class="relative">
+                    <input type="radio" name="accent-color" value="red" class="peer sr-only">
+                    <div class="h-10 w-full rounded-lg bg-red-500 peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-red-500"></div>
+                    <div class="absolute top-1 right-1 hidden peer-checked:block">
+                      <i class="fas fa-check text-white text-xs"></i>
+                    </div>
+                  </label>
+                  <label class="relative">
+                    <input type="radio" name="accent-color" value="orange" class="peer sr-only">
+                    <div class="h-10 w-full rounded-lg bg-orange-500 peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-orange-500"></div>
+                    <div class="absolute top-1 right-1 hidden peer-checked:block">
+                      <i class="fas fa-check text-white text-xs"></i>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Layout Preferences -->
+            <div class="p-6 space-y-6">
+              <h3 class="text-lg font-medium">Layout Preferences</h3>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="navigation-style" class="block text-sm font-medium mb-1">Navigation Style</label>
+                  <select id="navigation-style" name="navigation-style" class="block w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-800">
+                    <option value="sidebar">Sidebar</option>
+                    <option value="top">Top Navigation</option>
+                    <option value="compact">Compact</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label for="density" class="block text-sm font-medium mb-1">Density</label>
+                  <select id="density" name="density" class="block w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-800">
+                    <option value="comfortable">Comfortable</option>
+                    <option value="compact">Compact</option>
+                    <option value="spacious">Spacious</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="space-y-4">
+                <div class="flex items-start">
+                  <div class="flex items-center h-5">
+                    <input id="sidebar-collapse" name="sidebar-collapse" type="checkbox" checked
+                           class="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800">
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label for="sidebar-collapse" class="font-medium">Collapsible Sidebar</label>
+                    <p class="text-gray-500 dark:text-gray-400">Allow sidebar to be collapsed for more space</p>
+                  </div>
+                </div>
+
+                <div class="flex items-start">
+                  <div class="flex items-center h-5">
+                    <input id="animations" name="animations" type="checkbox" checked
+                           class="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800">
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label for="animations" class="font-medium">UI Animations</label>
+                    <p class="text-gray-500 dark:text-gray-400">Enable subtle transitions and animations</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Advanced Customization -->
+            <div class="p-6 space-y-6">
+              <h3 class="text-lg font-medium">Advanced Customization</h3>
+              
+              <div>
+                <label for="font-family" class="block text-sm font-medium mb-1">Font Family</label>
+                <select id="font-family" name="font-family" class="block w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-800">
+                  <option value="system" selected>System Default</option>
+                  <option value="inter">Inter</option>
+                  <option value="roboto">Roboto</option>
+                  <option value="open-sans">Open Sans</option>
+                  <option value="geist">Geist</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="font-size" class="block text-sm font-medium mb-1">Base Font Size</label>
+                <input type="range" id="font-size" name="font-size" min="12" max="18" value="16" step="1"
+                       class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  <span>Small</span>
+                  <span>Medium</span>
+                  <span>Large</span>
+                </div>
+              </div>
+
+              <div>
+                <label for="custom-css" class="block text-sm font-medium mb-1">Custom CSS</label>
+                <textarea id="custom-css" name="custom-css" rows="4"
+                          class="block w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-800 font-mono text-sm"></textarea>
+                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Add your own CSS rules to further customize the appearance</p>
+              </div>
+            </div>
+
+            <!-- Footer with Save Button -->
+            <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 flex justify-end space-x-3">
+              <button type="button" class="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                Reset Defaults
+              </button>
+              <button type="submit" class="px-6 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                Apply Changes
+              </button>
+              <a href='/settings' class="px-6 py-2.5 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                Go Back
+              </a>
+            </div>
+          </form>
+        </div>
+
+        <!-- Theme Preview -->
+        <div class="mt-8 bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+            <h2 class="text-lg font-medium">Theme Preview</h2>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">See how your changes will look before applying them</p>
+          </div>
+          <div class="p-6">
+            <div class="relative bg-gray-100 dark:bg-gray-900 rounded-xl p-6 h-64 overflow-hidden">
+              <!-- Mock Sidebar -->
+              <div class="absolute left-0 top-0 bottom-0 w-16 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col items-center py-4 space-y-5">
+                <div class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+                  <i class="fas fa-home text-primary-600 dark:text-primary-400"></i>
+                </div>
+                <div class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                  <i class="fas fa-chart-bar text-gray-500 dark:text-gray-400"></i>
+                </div>
+                <div class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                  <i class="fas fa-envelope text-gray-500 dark:text-gray-400"></i>
+                </div>
+              </div>
+              
+              <!-- Mock Content -->
+              <div class="ml-16 h-full">
+                <div class="flex justify-between items-center mb-6">
+                  <h3 class="text-lg font-medium">Dashboard</h3>
+                  <div class="flex items-center space-x-3">
+                    <div class="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                      <i class="fas fa-bell text-gray-500 dark:text-gray-400"></i>
+                    </div>
+                    <div class="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                  </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Users</span>
+                      <i class="fas fa-users text-primary-500"></i>
+                    </div>
+                    <p class="mt-2 text-2xl font-semibold">1,248</p>
+                    <p class="text-xs text-green-500 mt-1">+12.5% from last month</p>
+                  </div>
+                  
+                  <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Revenue</span>
+                      <i class="fas fa-dollar-sign text-primary-500"></i>
+                    </div>
+                    <p class="mt-2 text-2xl font-semibold">$24,780</p>
+                    <p class="text-xs text-green-500 mt-1">+8.3% from last month</p>
+                  </div>
+                  
+                  <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 shadow-sm">
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Active Now</span>
+                      <i class="fas fa-bolt text-primary-500"></i>
+                    </div>
+                    <p class="mt-2 text-2xl font-semibold">87</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">12 in last hour</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Theme switcher for preview
+    document.querySelectorAll('input[name="color-scheme"]').forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        if (e.target.value === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else if (e.target.value === 'light') {
+          document.documentElement.classList.remove('dark');
+        } else {
+          // System preference
+          if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        }
+      });
+    });
+
+    // Font size slider
+    const fontSizeSlider = document.getElementById('font-size');
+    fontSizeSlider.addEventListener('input', (e) => {
+      document.documentElement.style.fontSize = `${e.target.value}px`;
+    });
+
+    // Accent color preview
+    document.querySelectorAll('input[name="accent-color"]').forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        const color = e.target.value;
+        document.documentElement.style.setProperty('--color-primary-600', `var(--color-${color}-600)`);
+        document.documentElement.style.setProperty('--color-primary-700', `var(--color-${color}-700)`);
+      });
+    });
+  </script>
+</body>
+</html>

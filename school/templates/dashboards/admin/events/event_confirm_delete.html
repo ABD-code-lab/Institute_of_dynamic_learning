@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirm Deletion | TechSphere</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            danger: {
+              50: '#fef2f2',
+              100: '#fee2e2',
+              200: '#fecaca',
+              300: '#fca5a5',
+              400: '#f87171',
+              500: '#ef4444',
+              600: '#dc2626',
+              700: '#b91c1c',
+              800: '#991b1b',
+              900: '#7f1d1d',
+            }
+          },
+          animation: {
+            'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
+            'fade-in': 'fadeIn 0.3s ease-out',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(10px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            shake: {
+              '0%, 100%': { transform: 'translateX(0)' },
+              '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-5px)' },
+              '20%, 40%, 60%, 80%': { transform: 'translateX(5px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+    }
+    .confirmation-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.03), 0 10px 10px -5px rgba(0, 0, 0, 0.01);
+      border: 1px solid rgba(226, 232, 240, 0.6);
+    }
+    .danger-zone {
+      position: relative;
+      overflow: hidden;
+    }
+    .danger-zone::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #ef4444, #dc2626);
+    }
+    .pulse-danger {
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+      animation: pulse-danger 2s infinite;
+    }
+    @keyframes pulse-danger {
+      0% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+      }
+    }
+  </style>
+</head>
+<body class="py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md mx-auto animate-fade-in">
+    <!-- Confirmation Card -->
+    <div class="confirmation-card danger-zone rounded-xl overflow-hidden">
+      <div class="p-8 text-center">
+        <!-- Warning Icon -->
+        <div class="mx-auto mb-6 w-20 h-20 rounded-full bg-red-50 flex items-center justify-center text-red-500 border-2 border-red-200">
+          <i class="fas fa-exclamation-triangle text-3xl"></i>
+        </div>
+        
+        <!-- Title -->
+        <h1 class="text-2xl font-bold text-gray-900 mb-3">Confirm Deletion</h1>
+        
+        <!-- Event Details -->
+        <div class="bg-red-50/50 border border-red-100 rounded-lg p-4 mb-6">
+          <p class="text-red-800 font-medium mb-1">
+            <i class="fas fa-calendar-alt mr-2"></i> "{{ event.title }}"
+          </p>
+          <p class="text-sm text-red-700">
+            <i class="fas fa-clock mr-1.5"></i> {{ event.start_date|date:"M d, Y H:i" }}
+          </p>
+        </div>
+        
+        <!-- Warning Message -->
+        <div class="text-left bg-amber-50/50 border border-amber-100 rounded-lg p-4 mb-8">
+          <h3 class="flex items-center text-amber-800 font-medium mb-2">
+            <i class="fas fa-radiation mr-2"></i> Warning
+          </h3>
+          <p class="text-sm text-amber-700">
+            This action will permanently delete the event and all associated data. This cannot be undone.
+          </p>
+        </div>
+        
+        <!-- Confirmation Form -->
+        <form method="post">
+          {% csrf_token %}
+          <div class="flex flex-col sm:flex-row justify-center gap-3">
+            <a href="{% url 'event_list' %}" 
+               class="px-6 py-3 bg-white text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm border border-gray-200 flex items-center justify-center">
+              <i class="fas fa-times mr-2"></i> Cancel
+            </a>
+            <button type="submit" 
+                    class="px-6 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors shadow-sm flex items-center justify-center pulse-danger"
+                    id="deleteButton">
+              <i class="fas fa-trash-alt mr-2"></i> Delete Permanently
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <!-- Additional Warning -->
+    <div class="mt-6 text-center text-sm text-gray-500">
+      <p><i class="fas fa-shield-alt mr-1.5"></i> For security, this action requires confirmation</p>
+    </div>
+  </div>
+
+  <script>
+    // Add shake animation when trying to delete
+    const deleteButton = document.getElementById('deleteButton');
+    let attempts = 0;
+    
+    deleteButton.addEventListener('mouseover', () => {
+      attempts++;
+      if (attempts === 3) {
+        deleteButton.classList.add('animate-shake');
+        setTimeout(() => {
+          deleteButton.classList.remove('animate-shake');
+        }, 500);
+      }
+    });
+    
+    // Change button text on first hover
+    deleteButton.addEventListener('mouseenter', () => {
+      if (attempts === 0) {
+        deleteButton.innerHTML = '<i class="fas fa-question-circle mr-2"></i> Are you sure?';
+      } else if (attempts === 1) {
+        deleteButton.innerHTML = '<i class="fas fa-exclamation-circle mr-2"></i> Really delete?';
+      } else {
+        deleteButton.innerHTML = '<i class="fas fa-trash-alt mr-2"></i> Delete Permanently';
+      }
+    });
+  </script>
+</body>
+</html>

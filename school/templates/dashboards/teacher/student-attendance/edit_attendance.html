@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Attendance | School Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4bb543;
+            --warning-color: #fca311;
+            --danger-color: #e63946;
+            --gray-color: #6c757d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fb;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 28px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.2);
+        }
+        
+        .btn-secondary {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            border: 1px solid #dee2e6;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+            transform: translateY(-2px);
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background-color: #e69500;
+            transform: translateY(-2px);
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+        
+        .status-option {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .present {
+            background-color: var(--success-color);
+        }
+        
+        .absent {
+            background-color: var(--danger-color);
+        }
+        
+        .late {
+            background-color: var(--warning-color);
+        }
+        
+        .current-record {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .current-record p {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .current-record i {
+            margin-right: 10px;
+            color: var(--gray-color);
+            width: 20px;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .form-actions {
+                flex-direction: column-reverse;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-edit"></i> Edit Attendance Record</h1>
+            <a href="{% url 'student_attendance_list' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+        
+        <div class="card">
+            <div class="current-record">
+                <p><i class="fas fa-user-graduate"></i> <strong>Student:</strong> {{ record.student_name }}</p>
+                <p><i class="fas fa-calendar-alt"></i> <strong>Original Date:</strong> {{ record.date|date:"M d, Y" }}</p>
+                <p><i class="fas fa-clipboard-check"></i> <strong>Current Status:</strong> 
+                    {% if record.status == 'Present' %}
+                        <span style="color: var(--success-color);">{{ record.status }}</span>
+                    {% elif record.status == 'Absent' %}
+                        <span style="color: var(--danger-color);">{{ record.status }}</span>
+                    {% elif record.status == 'Late' %}
+                        <span style="color: var(--warning-color);">{{ record.status }}</span>
+                    {% else %}
+                        {{ record.status }}
+                    {% endif %}
+                </p>
+            </div>
+            
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="student_name"><i class="fas fa-user-graduate"></i> Student Name</label>
+                    <input type="text" id="student_name" name="student_name" value="{{ record.student_name }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="date"><i class="fas fa-calendar-alt"></i> Date</label>
+                    <input type="date" id="date" name="date" value="{{ record.date|date:'Y-m-d' }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-clipboard-check"></i> Status</label>
+                    <select name="status" required>
+                        <option value="Present" {% if record.status == 'Present' %}selected{% endif %}>
+                            <span class="status-option">
+                                <span class="status-indicator present"></span>
+                                Present
+                            </span>
+                        </option>
+                        <option value="Absent" {% if record.status == 'Absent' %}selected{% endif %}>
+                            <span class="status-option">
+                                <span class="status-indicator absent"></span>
+                                Absent
+                            </span>
+                        </option>
+                        <option value="Late" {% if record.status == 'Late' %}selected{% endif %}>
+                            <span class="status-option">
+                                <span class="status-indicator late"></span>
+                                Late
+                            </span>
+                        </option>
+                    </select>
+                </div>
+                
+                <div class="form-actions">
+                    <a href="{% url 'student_attendance_list' %}" class="btn btn-secondary">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-warning">
+                        <i class="fas fa-save"></i> Update Record
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusSelect = document.querySelector('select[name="status"]');
+            
+            // Highlight the select border based on current status
+            function updateSelectBorder() {
+                const selectedOption = statusSelect.options[statusSelect.selectedIndex];
+                if (selectedOption.value === 'Present') {
+                    statusSelect.style.borderColor = 'var(--success-color)';
+                } else if (selectedOption.value === 'Absent') {
+                    statusSelect.style.borderColor = 'var(--danger-color)';
+                } else if (selectedOption.value === 'Late') {
+                    statusSelect.style.borderColor = 'var(--warning-color)';
+                }
+            }
+            
+            // Set initial border color
+            updateSelectBorder();
+            
+            // Update border color when selection changes
+            statusSelect.addEventListener('change', updateSelectBorder);
+        });
+    </script>
+</body>
+</html>

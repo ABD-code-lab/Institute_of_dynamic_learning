@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Edit Teacher</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8fafc;
+      background-image: radial-gradient(circle at 10% 20%, rgba(199, 210, 254, 0.3) 0%, rgba(254, 249, 195, 0.2) 90%);
+    }
+    
+    .form-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+    
+    .form-container:hover {
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+      transform: translateY(-2px);
+    }
+    
+    .input-field {
+      transition: all 0.3s ease;
+      background-color: rgba(249, 250, 251, 0.8);
+      border: 1px solid rgba(209, 213, 219, 0.5);
+    }
+    
+    .input-field:focus {
+      background-color: white;
+      box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.3);
+      border-color: #818cf8;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(99, 102, 241, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px rgba(99, 102, 241, 0.3);
+    }
+    
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+    
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.13) 0%,
+        rgba(255, 255, 255, 0.13) 77%,
+        rgba(255, 255, 255, 0.5) 92%,
+        rgba(255, 255, 255, 0.0) 100%
+      );
+      transform: rotate(30deg);
+      transition: all 0.7s ease;
+    }
+    
+    .btn-primary:hover::after {
+      left: 100%;
+    }
+    
+    .form-icon {
+      color: #6366f1;
+      transition: all 0.3s ease;
+    }
+    
+    .input-group:hover .form-icon {
+      color: #8b5cf6;
+    }
+    
+    .floating-label {
+      position: absolute;
+      pointer-events: none;
+      left: 50px;
+      top: 15px;
+      transition: all 0.2s ease;
+      color: #9ca3af;
+      font-size: 0.95rem;
+      background: transparent;
+    }
+    
+    .input-field:focus ~ .floating-label,
+    .input-field:not(:placeholder-shown) ~ .floating-label {
+      top: -10px;
+      left: 48px;
+      font-size: 0.75rem;
+      background: white;
+      padding: 0 8px;
+      color: #6366f1;
+      font-weight: 500;
+    }
+    
+    .back-btn {
+      transition: all 0.3s ease;
+      color: #6366f1;
+    }
+    
+    .back-btn:hover {
+      color: #8b5cf6;
+      transform: translateX(-3px);
+    }
+    
+    .header-icon {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+  <div class="form-container w-full max-w-md p-8 mx-4">
+    <div class="text-center mb-8">
+      <div class="flex justify-center mb-4">
+        <i class="fas fa-user-edit text-5xl header-icon"></i>
+      </div>
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">
+        Edit Teacher Profile
+      </h1>
+      <p class="text-gray-500">
+        Update the teacher's information below
+      </p>
+    </div>
+
+    <form method="POST">
+      {% csrf_token %}
+      
+      <!-- Name Field -->
+      <div class="mb-6 input-group">
+        <div class="relative">
+          <div class="absolute left-4 top-4 form-icon">
+            <i class="fas fa-user text-lg"></i>
+          </div>
+          <input 
+            type="text" 
+            name="name" 
+            id="name"
+            class="input-field w-full px-4 py-3 pl-12 rounded-lg focus:outline-none"
+            placeholder=" "
+            value="{{ teacher.name }}"
+            required
+          >
+          <label for="name" class="floating-label">Full Name</label>
+        </div>
+      </div>
+      
+      <!-- Email Field -->
+      <div class="mb-6 input-group">
+        <div class="relative">
+          <div class="absolute left-4 top-4 form-icon">
+            <i class="fas fa-envelope text-lg"></i>
+          </div>
+          <input 
+            type="email" 
+            name="email" 
+            id="email"
+            class="input-field w-full px-4 py-3 pl-12 rounded-lg focus:outline-none"
+            placeholder=" "
+            value="{{ teacher.email }}"
+            required
+          >
+          <label for="email" class="floating-label">Email Address</label>
+        </div>
+      </div>
+      
+      <!-- Subject Field -->
+      <div class="mb-6 input-group">
+        <div class="relative">
+          <div class="absolute left-4 top-4 form-icon">
+            <i class="fas fa-book-open text-lg"></i>
+          </div>
+          <input 
+            type="text" 
+            name="subject" 
+            id="subject"
+            class="input-field w-full px-4 py-3 pl-12 rounded-lg focus:outline-none"
+            placeholder=" "
+            value="{{ teacher.subject }}"
+            required
+          >
+          <label for="subject" class="floating-label">Subject</label>
+        </div>
+      </div>
+      
+      <!-- Phone Field -->
+      <div class="mb-8 input-group">
+        <div class="relative">
+          <div class="absolute left-4 top-4 form-icon">
+            <i class="fas fa-phone text-lg"></i>
+          </div>
+          <input 
+            type="tel" 
+            name="phone" 
+            id="phone"
+            class="input-field w-full px-4 py-3 pl-12 rounded-lg focus:outline-none"
+            placeholder=" "
+            value="{{ teacher.phone }}"
+            required
+          >
+          <label for="phone" class="floating-label">Phone Number</label>
+        </div>
+      </div>
+      
+      <div class="flex items-center justify-between">
+        {% comment %} <a href="{% url 'teachers_list' %}" class="back-btn px-4 py-2 rounded-lg font-medium flex items-center">
+          <i class="fas fa-arrow-left mr-2"></i> Cancel
+        </a> {% endcomment %}
+        <button class="btn-primary px-6 py-3 rounded-lg text-white font-medium flex items-center" type="submit">
+          <i class="fas fa-save mr-2"></i> Save Changes
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Initialize floating labels for pre-filled values
+    document.querySelectorAll('.input-field').forEach(input => {
+      if(input.value) {
+        const label = input.nextElementSibling;
+        label.style.top = '-10px';
+        label.style.left = '48px';
+        label.style.fontSize = '0.75rem';
+        label.style.background = 'white';
+        label.style.padding = '0 8px';
+        label.style.color = '#6366f1';
+        label.style.fontWeight = '500';
+      }
+      
+      input.addEventListener('focus', () => {
+        const label = input.nextElementSibling;
+        label.style.top = '-10px';
+        label.style.left = '48px';
+        label.style.fontSize = '0.75rem';
+        label.style.background = 'white';
+        label.style.padding = '0 8px';
+        label.style.color = '#6366f1';
+        label.style.fontWeight = '500';
+      });
+      
+      input.addEventListener('blur', () => {
+        if (!input.value) {
+          const label = input.nextElementSibling;
+          label.style.top = '15px';
+          label.style.left = '50px';
+          label.style.fontSize = '0.95rem';
+          label.style.background = 'transparent';
+          label.style.color = '#9ca3af';
+          label.style.fontWeight = 'normal';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

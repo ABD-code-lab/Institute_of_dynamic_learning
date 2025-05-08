@@ -1,0 +1,52 @@
+<!-- templates/teachers/detail.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Teacher Details</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 transition transform hover:scale-[1.02] duration-300 ease-in-out">
+    <div class="text-center mb-6">
+      <h1 class="text-3xl font-extrabold text-gray-800"> Teacher Details</h1>
+      <p class="text-gray-500 mt-2">Comprehensive teacher profile</p>
+    </div>
+
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <span class="text-gray-600 font-medium">Name:</span>
+        <span class="text-gray-800 font-semibold">{{ teacher.name }}</span>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <span class="text-gray-600 font-medium">Email:</span>
+        <span class="text-gray-800 font-semibold">{{ teacher.email }}</span>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <span class="text-gray-600 font-medium">Subject:</span>
+        <span class="text-gray-800 font-semibold">{{ teacher.subject }}</span>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <span class="text-gray-600 font-medium">Phone:</span>
+        <span class="text-gray-800 font-semibold">{{ teacher.phone }}</span>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <span class="text-gray-600 font-medium">Joined:</span>
+        <span class="text-gray-800 font-semibold">{{ teacher.joined_date }}</span>
+      </div>
+    </div>
+
+    <div class="mt-8 text-center">
+      <a href="{% url 'teacher_list' %}" class="inline-block bg-blue-600 text-white px-6 py-2 rounded-full shadow hover:bg-blue-700 transition duration-200">
+        ← Back to List
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>

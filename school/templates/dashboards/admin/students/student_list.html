@@ -1,0 +1,314 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Management</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8fafc;
+      background-image: linear-gradient(to bottom right, #f0f4ff, #fdf2f8);
+    }
+    
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+      transform: translateY(-2px);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(99, 102, 241, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px rgba(99, 102, 241, 0.3);
+    }
+    
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+    
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.13) 0%,
+        rgba(255, 255, 255, 0.13) 77%,
+        rgba(255, 255, 255, 0.5) 92%,
+        rgba(255, 255, 255, 0.0) 100%
+      );
+      transform: rotate(30deg);
+      transition: all 0.7s ease;
+    }
+    
+    .btn-primary:hover::after {
+      left: 100%;
+    }
+    
+    .search-input {
+      transition: all 0.3s ease;
+      background-color: rgba(249, 250, 251, 0.8);
+      border: 1px solid rgba(209, 213, 219, 0.5);
+    }
+    
+    .search-input:focus {
+      background-color: white;
+      box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.3);
+      border-color: #818cf8;
+    }
+    
+    .table-row:hover {
+      background-color: rgba(249, 250, 251, 0.8) !important;
+    }
+    
+    .action-btn {
+      transition: all 0.2s ease;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    
+    .view-btn {
+      background-color: rgba(59, 130, 246, 0.1);
+      color: #3b82f6;
+    }
+    
+    .view-btn:hover {
+      background-color: rgba(59, 130, 246, 0.2);
+    }
+    
+    .edit-btn {
+      background-color: rgba(234, 179, 8, 0.1);
+      color: #eab308;
+    }
+    
+    .edit-btn:hover {
+      background-color: rgba(234, 179, 8, 0.2);
+    }
+    
+    .delete-btn {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+    }
+    
+    .delete-btn:hover {
+      background-color: rgba(239, 68, 68, 0.2);
+    }
+    
+    .header-icon {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .pagination-btn {
+      transition: all 0.2s ease;
+    }
+    
+    .pagination-btn:hover:not(.disabled) {
+      background-color: #e5e7eb;
+    }
+    
+    .status-badge {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="min-h-screen p-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="card p-8">
+      <!-- Header Section -->
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+        <div class="mb-4 md:mb-0">
+          <div class="flex items-center">
+            <i class="fas fa-user-graduate text-4xl header-icon mr-4"></i>
+            <div>
+              <h1 class="text-3xl font-bold text-gray-800">Student Management</h1>
+              <p class="text-gray-500">View and manage all registered students</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-3">
+          <a href="{% url 'admin_dashboard' %}" class="px-4 py-2 rounded-lg font-medium flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-700">
+            <i class="fas fa-arrow-left mr-2"></i> Dashboard
+          </a>
+          <a href="{% url 'student_create' %}" class="btn-primary px-4 py-2 rounded-lg text-white font-medium flex items-center justify-center">
+            <i class="fas fa-plus mr-2"></i> Add Student
+          </a>
+        </div>
+      </div>
+      
+      <!-- Search and Filter Section -->
+      <form method="GET" class="mb-6 flex flex-col md:flex-row gap-4">
+        <div class="relative flex-1">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <i class="fas fa-search text-gray-400"></i>
+          </div>
+          <input 
+            type="text" 
+            name="search" 
+            placeholder="Search students by name..." 
+            class="search-input w-full pl-10 pr-4 py-2 rounded-lg focus:outline-none"
+            value="{{ request.GET.search }}"
+          >
+        </div>
+        <button type="submit" class="btn-primary px-4 py-2 rounded-lg text-white font-medium">
+          <i class="fas fa-filter mr-2"></i> Search
+        </button>
+      </form>
+      
+      <!-- Students Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b border-gray-200">
+              <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">#</th>
+              <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Student</th>
+              <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+              <th class="px-6 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Academic</th>
+              <th class="px-6 py-4 text-right text-sm font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            {% for student in students %}
+            <tr class="table-row hover:bg-gray-50 transition">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ forloop.counter }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mr-4">
+                    <i class="fas fa-user"></i>
+                  </div>
+                  <div>
+                    <div class="text-sm font-medium text-gray-900">{{ student.name }}</div>
+                    <div class="text-sm text-gray-500">ID: {{ student.id }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">{{ student.email }}</div>
+                <div class="text-sm text-gray-500">{{ student.phone|default:"-" }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex flex-col">
+                  <span class="status-badge bg-purple-100 text-purple-800 w-fit mb-1">{{ student.roll_no }}</span>
+                  <span class="text-sm text-gray-900">{{ student.subject }}</span>
+                  <span class="text-xs text-gray-500">{{ student.date_of_birth|date:"M d, Y" }}</span>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <div class="flex justify-end space-x-2">
+                  <a href="{% url 'student_detail' student.pk %}" class="action-btn view-btn">
+                    <i class="fas fa-eye mr-1"></i> View
+                  </a>
+                  <a href="{% url 'student_update' student.pk %}" class="action-btn edit-btn">
+                    <i class="fas fa-edit mr-1"></i> Edit
+                  </a>
+                  <a href="{% url 'student_delete' student.pk %}" class="action-btn delete-btn">
+                    <i class="fas fa-trash-alt mr-1"></i> Delete 
+                  </a>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                <i class="fas fa-user-graduate text-3xl text-gray-300 mb-2 block"></i>
+                No students found. <a href="{% url 'student_create' %}" class="text-indigo-600 hover:underline">Add a student</a> to get started.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Pagination -->
+      {% if students.has_other_pages %}
+      <div class="flex items-center justify-between mt-6 px-4">
+        <div class="text-sm text-gray-500">
+          Showing {{ students.start_index }} to {{ students.end_index }} of {{ students.paginator.count }} entries
+        </div>
+        <div class="flex space-x-1">
+          {% if students.has_previous %}
+            <a href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" class="pagination-btn px-3 py-1 rounded-lg border border-gray-200">
+              <i class="fas fa-angle-double-left"></i>
+            </a>
+            <a href="?page={{ students.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" class="pagination-btn px-3 py-1 rounded-lg border border-gray-200">
+              <i class="fas fa-angle-left"></i>
+            </a>
+          {% else %}
+            <span class="pagination-btn px-3 py-1 rounded-lg border border-gray-200 disabled opacity-50">
+              <i class="fas fa-angle-double-left"></i>
+            </span>
+            <span class="pagination-btn px-3 py-1 rounded-lg border border-gray-200 disabled opacity-50">
+              <i class="fas fa-angle-left"></i>
+            </span>
+          {% endif %}
+          
+          {% for i in students.paginator.page_range %}
+            {% if students.number == i %}
+              <span class="pagination-btn px-3 py-1 rounded-lg bg-indigo-600 text-white">{{ i }}</span>
+            {% elif i > students.number|add:'-3' and i < students.number|add:'3' %}
+              <a href="?page={{ i }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" class="pagination-btn px-3 py-1 rounded-lg border border-gray-200">{{ i }}</a>
+            {% endif %}
+          {% endfor %}
+          
+          {% if students.has_next %}
+            <a href="?page={{ students.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" class="pagination-btn px-3 py-1 rounded-lg border border-gray-200">
+              <i class="fas fa-angle-right"></i>
+            </a>
+            <a href="?page={{ students.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" class="pagination-btn px-3 py-1 rounded-lg border border-gray-200">
+              <i class="fas fa-angle-double-right"></i>
+            </a>
+          {% else %}
+            <span class="pagination-btn px-3 py-1 rounded-lg border border-gray-200 disabled opacity-50">
+              <i class="fas fa-angle-right"></i>
+            </span>
+            <span class="pagination-btn px-3 py-1 rounded-lg border border-gray-200 disabled opacity-50">
+              <i class="fas fa-angle-double-right"></i>
+            </span>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    // Add hover effects to table rows
+    document.querySelectorAll('.table-row').forEach(row => {
+      row.addEventListener('mouseenter', () => {
+        row.style.backgroundColor = 'rgba(249, 250, 251, 0.8)';
+      });
+      row.addEventListener('mouseleave', () => {
+        row.style.backgroundColor = '';
+      });
+    });
+  </script>
+</body>
+</html>

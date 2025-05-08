@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Review</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="w-full max-w-md bg-white rounded-xl shadow-lg overflow-hidden">
+        <!-- Header Section -->
+        <div class="bg-gradient-to-r from-red-600 to-rose-600 px-6 py-4">
+            <h1 class="text-2xl font-bold text-white">Delete Review</h1>
+            <p class="text-red-100 mt-1">Confirm deletion of this review</p>
+        </div>
+
+        <!-- Review Content -->
+        <div class="px-6 py-6 border-b border-gray-200">
+            <div class="flex justify-between items-start mb-3">
+                <h2 class="text-xl font-semibold text-gray-800">{{ review.teacher_name }}</h2>
+                <div class="flex items-center bg-red-100 px-3 py-1 rounded-full">
+                    <span class="text-red-800 font-medium mr-1">{{ review.rating }}</span>
+                    <i class="fas fa-star text-yellow-400 text-sm"></i>
+                </div>
+            </div>
+            
+            <div class="flex mb-2">
+                {% for i in "12345" %}
+                    {% if forloop.counter <= review.rating %}
+                        <i class="fas fa-star text-yellow-400 mr-1"></i>
+                    {% else %}
+                        <i class="far fa-star text-yellow-400 mr-1"></i>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            
+            <p class="text-gray-600 mt-2">{{ review.comment }}</p>
+        </div>
+
+        <!-- Confirmation Actions -->
+        <div class="px-6 py-4 bg-gray-50 rounded-b-xl">
+            <form method="POST" class="flex justify-between items-center">
+                {% csrf_token %}
+                <a href="{% url 'review_list' %}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200">
+                    <i class="fas fa-times mr-2"></i> Cancel
+                </a>
+                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-200">
+                    <i class="fas fa-trash-alt mr-2"></i> Yes, Delete
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

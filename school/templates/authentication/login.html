@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+    
+    .card {
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      background-color: rgba(255, 255, 255, 0.85);
+      border-radius: 12px;
+      border: 1px solid rgba(209, 213, 219, 0.3);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    }
+    
+    .input-field {
+      transition: all 0.3s ease;
+      background-color: rgba(249, 250, 251, 0.7);
+    }
+    
+    .input-field:focus {
+      background-color: white;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
+    }
+    
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+    
+    .password-container {
+      position: relative;
+    }
+    
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #9ca3af;
+      transition: all 0.2s ease;
+    }
+    
+    .toggle-password:hover {
+      color: #4b5563;
+    }
+    
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: #9ca3af;
+    }
+    
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .divider::before {
+      margin-right: 1rem;
+    }
+    
+    .divider::after {
+      margin-left: 1rem;
+    }
+    
+    .social-btn {
+      transition: all 0.3s ease;
+      border: 1px solid #e5e7eb;
+    }
+    
+    .social-btn:hover {
+      border-color: #d1d5db;
+      transform: translateY(-2px);
+    }
+    
+    .floating-label {
+      position: absolute;
+      pointer-events: none;
+      left: 12px;
+      top: 12px;
+      transition: 0.2s ease all;
+      color: #9ca3af;
+      font-size: 0.875rem;
+    }
+    
+    .input-field:focus ~ .floating-label,
+    .input-field:not(:placeholder-shown) ~ .floating-label {
+      top: -8px;
+      left: 10px;
+      font-size: 0.75rem;
+      background: white;
+      padding: 0 4px;
+      color: #3b82f6;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+  <div class="card w-[40%] p-8">
+    <div class="text-center mb-8">
+      <div class="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
+        </svg>
+      </div>
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">Welcome back</h1>
+      <p class="text-gray-600">Sign in to your account to continue</p>
+    </div>
+
+    {% if error %}
+      <div class="mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm">
+        <i class="fas fa-exclamation-circle mr-2"></i> {{ error }}
+      </div>
+    {% endif %}
+
+    <form method="post" class="space-y-5">
+      {% csrf_token %}
+      
+      <div class="relative">
+        <input 
+          name="username" 
+          type="text" 
+          autocomplete='off'
+          required 
+          class="input-field w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:outline-none"
+          placeholder=" "
+        >
+        <label class="floating-label">Username</label>
+      </div>
+      
+      <div class="relative password-container">
+        <input 
+          name="password" 
+          id="password" 
+          type="password" 
+          required 
+          class="input-field w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:outline-none pr-12"
+          placeholder=" "
+        >
+        <label class="floating-label">Password</label>
+        <span class="toggle-password" onclick="togglePassword()">
+          <i id="eyeIcon" class="fas fa-eye-slash"></i>
+        </span>
+      </div>
+      
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <input id="remember-me" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+          <label for="remember-me" class="ml-2 block text-sm text-gray-700">Remember me</label>
+        </div>
+        <a href="#" class="text-sm text-blue-600 hover:underline">Forgot password?</a>
+      </div>
+      
+      <button type="submit" class="btn-primary w-full py-3 px-4 rounded-lg text-white font-medium">
+        Sign In
+      </button>
+      
+      <div class="divider text-sm">OR CONTINUE WITH</div>
+      
+      <div class="grid grid-cols-2 gap-3">
+        <button type="button" class="social-btn flex items-center justify-center py-2 px-4 rounded-lg bg-white">
+          <svg class="w-5 h-5 mr-2 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/>
+          </svg>
+          LinkedIn
+        </button>
+        <button type="button" class="social-btn flex items-center justify-center py-2 px-4 rounded-lg bg-white">
+          <svg class="w-5 h-5 mr-2 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+          GitHub
+        </button>
+      </div>
+      
+      <p class="text-center text-sm text-gray-600">
+        Don't have an account? 
+        <a href="{% url 'signup' %}" class="text-blue-600 hover:underline font-medium">Sign up</a>
+      </p>
+    </form>
+  </div>
+
+  <script>
+    function togglePassword() {
+      const passwordInput = document.getElementById('password');
+      const eyeIcon = document.getElementById('eyeIcon');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+      } else {
+        passwordInput.type = 'password';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+      }
+    }
+    
+    // Add floating label functionality
+    document.querySelectorAll('.input-field').forEach(input => {
+      input.addEventListener('focus', () => {
+        input.nextElementSibling.classList.add('active');
+      });
+      input.addEventListener('blur', () => {
+        if (!input.value) {
+          input.nextElementSibling.classList.remove('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html> 
+
+
+
+<!-- 🚀 Just completed a major milestone in my development journey:
+I’ve built a full-stack School Management System named **"Institute of Dynamic Learning"** using:
+
+🔧 Tech Stack:
+HTML | Tailwind CSS | JavaScript | Python | Django | SQLite
+
+👥 Role-Based Authentication (Access Controlled):
+🔸 Admin – Full Control
+🔹 Teacher – Partial Control
+🔸 Student – Read-Only Access
+
+📚 Key Features:
+
+✅ Admin Panel
+• CRUD Teachers & Students
+• Manage Events & Birthdays
+• Print Student Cards
+• Manage Fee Records
+• Monitor Teacher Attendance
+• Read Student Results
+
+✅ Teacher Panel
+• CRUD Student Results & Diaries
+• Manage Student Attendance
+• View Events, Birthdays & Fee Info
+
+✅ Student Panel
+• View Events, Birthdays, Results, Fee Info
+• Submit Teacher Reviews with Ratings
+
+🖥️ Over 30+ fully responsive pages designed with Tailwind CSS and JavaScript.
+Every role has a dedicated dashboard with settings & help sections for seamless navigation.
+
+💡 Built with scalability, security, and usability in mind.
+
+I’m excited to keep learning and building impactful applications!
+Let me know your thoughts or suggestions 💬
+
+
+
+#django #webdevelopment #python #tailwindcss #javascript #html #fullstackdeveloper #schoolmanagementsystem #projectshowcase #softwaredevelopment #studentproject 
+
+
+
+
+
+
+
+🚀 Just Built: "Institute of Dynamic Learning" – A Full-Stack School Management System!
+
+I’m excited to share my latest project—a role-based school management platform built with HTML, Tailwind CSS, JavaScript, Python, Django, and SQLite. This system streamlines administrative, teaching, and student workflows with secure, access-controlled dashboards.
+
+🔑 Role-Based Access & Key Features:
+✅ Admin:
+
+CRUD operations for teachers & students
+
+Manage events, birthdays, and student cards (with print functionality)
+
+Fee details management & teacher attendance control
+
+Full dashboard analytics & system oversight
+
+✅ Teacher:
+
+CRUD student results & attendance
+
+Manage diaries (announcements/notes)
+
+View events, birthdays, and fee details
+
+✅ Student:
+
+Submit teacher reviews
+
+Access results, fee details, events & birthdays
+
+🛠️ Tech & Design:
+
+30+ responsive pages built with Tailwind CSS & vanilla JS
+
+Django backend for robust authentication & data handling
+
+SQLite database for efficient local storage
+
+This project honed my skills in full-stack development, UI/UX design, and role-based security. Excited to iterate further with feedback!
+
+🔗 [Optional: Link to GitHub/Live Demo]
+#Django #FullStack #WebDevelopment #TailwindCSS #EdTech #Python #JavaScript #PortfolioProject

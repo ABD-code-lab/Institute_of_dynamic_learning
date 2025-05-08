@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Print Student Card - {{ student.name }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap');
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+    }
+    .card-container {
+      width: 9in;
+      height: 3.5in;
+      perspective: 1000px;
+    }
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.2);
+    }
+    .card-container:hover .card-inner {
+      transform: translateY(-5px) rotateX(5deg);
+    }
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .card-back {
+      transform: rotateY(180deg);
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      color: white;
+    }
+    .university-name {
+      font-family: 'Montserrat', sans-serif;
+      letter-spacing: -0.5px;
+    }
+    .student-photo {
+      border: 3px solid white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .holographic-strip {
+      background: linear-gradient(90deg, 
+        rgba(255,255,255,0) 0%, 
+        rgba(255,255,255,0.5) 50%, 
+        rgba(255,255,255,0) 100%);
+      background-color: #3b82f6;
+      animation: holographic 3s infinite alternate;
+    }
+    @keyframes holographic {
+      0% { background-color: #3b82f6; }
+      25% { background-color: #8b5cf6; }
+      50% { background-color: #ec4899; }
+      75% { background-color: #f59e0b; }
+      100% { background-color: #10b981; }
+    }
+    .qr-code {
+      background: white;
+      padding: 8px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .magnetic-strip {
+      background: linear-gradient(to right, #1a1a1a, #333333, #1a1a1a);
+      height: 24px;
+    }
+    .signature-strip {
+      background: repeating-linear-gradient(
+        45deg,
+        #f8fafc,
+        #f8fafc 10px,
+        #e2e8f0 10px,
+        #e2e8f0 20px
+      );
+    }
+    .flip-btn {
+      transition: all 0.3s ease;
+      transform-style: preserve-3d;
+    }
+    .flip-btn:hover {
+      transform: rotateY(10deg) scale(1.05);
+    }
+    @media print {
+      body, html {
+        width: 9in;
+        height: 3.5in;
+        margin: 0;
+        padding: 0;
+        background: white !important;
+      }
+      .card-container {
+        width: 100%;
+        height: 100%;
+        box-shadow: none;
+        margin: 0;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .card-inner {
+        transform: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 print:p-0">
+  <div class="card-container w-[45%]">
+    <div class="card-inner">
+      <!-- Front of Card -->
+      <div class="card-front bg-white flex">
+        <!-- Holographic Security Strip -->
+        <div class="absolute top-0 left-0 right-0 h-2 holographic-strip"></div>
+        
+        <!-- Left Section: Photo and Logo -->
+        <div class="w-1/3 bg-gradient-to-b from-blue-50 to-indigo-50 p-6 flex flex-col items-center justify-between relative">
+          <!-- Watermark -->
+          <div class="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEyIDJsLTAgMTZtMTAgLTlsLTIwIDBtMTUgLTlsLTE1IDltMTAgLTlsLTEwIDkiIHN0cm9rZT0iIzNhODJmNiIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIi8+PC9zdmc+')]"></div>
+          
+          <!-- Institute Logo -->
+          <div class="text-center">
+            <div class="w-16 h-16 bg-white rounded-xl shadow-md flex items-center justify-center mx-auto mb-2">
+              <i class="fas fa-graduation-cap text-3xl text-blue-600"></i>
+            </div>
+            <h2 class="university-name font-bold text-blue-800 text-lg">UNIVERSITY</h2>
+            <p class="text-xs text-gray-600 font-medium">OF TECHNOLOGY</p>
+          </div>
+          
+          <!-- Student Photo -->
+          <div class="student-photo w-28 h-28 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden">
+            <i class="fas fa-user text-5xl text-gray-400"></i>
+          </div>
+          
+          <!-- Validity -->
+          <div class="text-center">
+            <div class="text-xs font-semibold text-gray-700">VALID THRU</div>
+            <div class="text-sm font-bold text-blue-800">06/2026</div>
+          </div>
+        </div>
+
+        <!-- Right Section: Details -->
+        <div class="w-2/3 p-6 flex">
+          <div class="flex-1">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h1 class="text-2xl font-bold text-gray-900 mb-1">STUDENT ID</h1>
+                <p class="text-xs text-gray-500 font-medium">Undergraduate Program</p>
+              </div>
+              <div class="text-right">
+                <div class="text-xs font-medium text-gray-500">ID NUMBER</div>
+                <div class="text-lg font-bold text-blue-600 tracking-wider">{{ student.roll_no|default:'STD2025001' }}</div>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 mb-4">
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Name</div>
+                <div class="text-sm font-bold text-gray-900">{{ student.name|default:'John Doe' }}</div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Major</div>
+                <div class="text-sm font-bold text-gray-900">{{ student.subject|default:'Computer Science' }}</div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">DOB</div>
+                <div class="text-sm font-bold text-gray-900">{{ student.date_of_birth|default:'01/01/2000' }}</div>
+              </div>
+              <div>
+                <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Status</div>
+                <div class="text-sm font-bold text-green-600">Active</div>
+              </div>
+            </div>
+            
+            <div class="border-t border-gray-200 pt-3">
+              <div class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Contact</div>
+              <div class="flex justify-between">
+                <div class="text-sm font-medium text-gray-900">{{ student.email|default:'john.doe@university.edu' }}</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- QR Code Section -->
+          <div class="flex flex-col items-center justify-between ml-4">
+            <div class="qr-code">
+              <div class="w-24 h-24 bg-gray-100 flex items-center justify-center">
+                <i class="fas fa-qrcode text-4xl text-gray-600"></i>
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Authorized Signature</div>
+              <div class="signature-strip h-8 w-24 mt-1"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Back of Card -->
+      <div class="card-back flex flex-col">
+        <!-- Magnetic Strip -->
+        <div class="magnetic-strip w-full"></div>
+        
+        <!-- University Contact Info -->
+        <div class="p-6 flex-1 flex flex-col justify-between">
+          <div>
+            <h3 class="text-xl font-bold text-white mb-2">UNIVERSITY OF TECHNOLOGY</h3>
+            <p class="text-sm text-blue-100 mb-4">123 Education Blvd, Campus City, CC 12345</p>
+            
+            <div class="grid grid-cols-2 gap-4 text-sm text-blue-100 mb-6">
+              <div>
+                <div class="font-semibold">Phone:</div>
+                <div>(555) 123-4567</div>
+              </div>
+              <div>
+                <div class="font-semibold">Website:</div>
+                <div>www.university.edu</div>
+              </div>
+              <div>
+                <div class="font-semibold">Email:</div>
+                <div>info@university.edu</div>
+              </div>
+              <div>
+                <div class="font-semibold">Emergency:</div>
+                <div>(555) 987-6543</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Barcode and Disclaimer -->
+          <div>
+            <div class="bg-black h-12 w-full mb-2 flex items-center justify-center">
+              <div class="text-white text-xs font-mono">STD{{ student.roll_no|default:'2025001' }}</div>
+            </div>
+            <p class="text-[8px] text-blue-200 text-center">
+              This card is property of University of Technology. If found, please return to the address above.
+              Unauthorized use is prohibited. Valid only with signature and photo.
+            </p>
+          </div>
+        </div>
+        
+        <!-- Holographic Seal -->
+        <div class="absolute bottom-4 right-4 w-12 h-12 rounded-full bg-gradient-to-br from-white/30 to-white/10 backdrop-blur-sm flex items-center justify-center">
+          <i class="fas fa-shield-alt text-white/80"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="flex gap-4 mt-6 no-print">
+    <button onclick="window.print()" class="flip-btn bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg flex items-center gap-2 transition-all">
+      <i class="fas fa-print"></i>
+      Print Card
+    </button>
+    
+    <button onclick="document.querySelector('.card-inner').style.transform = 'rotateY(180deg)'" class="flip-btn bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white font-semibold py-3 px-6 rounded-xl shadow-lg flex items-center gap-2 transition-all">
+      <i class="fas fa-sync-alt"></i>
+      Flip Card
+    </button>
+  </div>
+
+  <script>
+    // Auto-flip back when clicking anywhere after flipping
+    document.addEventListener('click', function(e) {
+      const cardInner = document.querySelector('.card-inner');
+      const flipBtn = document.querySelector('.flip-btn:nth-of-type(2)');
+      
+      if (cardInner.style.transform === 'rotateY(180deg)' && e.target !== flipBtn) {
+        cardInner.style.transform = '';
+      }
+    });
+    
+
+  </script>
+</body>
+</html>

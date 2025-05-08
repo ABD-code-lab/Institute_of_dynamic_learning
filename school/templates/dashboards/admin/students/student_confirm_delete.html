@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Confirm Delete</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-red-100 via-white to-red-200 min-h-screen flex items-center justify-center">
+
+  <div class="bg-white/80 backdrop-blur-lg shadow-2xl rounded-2xl p-10 w-full max-w-lg border border-red-300">
+    <div class="text-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-14 w-14 text-red-600 mb-4" fill="none"
+           viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M6 18L18 6M6 6l12 12" />
+      </svg>
+
+      <h1 class="text-2xl font-bold text-gray-800 mb-2">
+        Confirm Deletion
+      </h1>
+
+      <p class="text-lg text-gray-700 mb-6">
+        Are you sure you want to delete <span class="font-semibold text-red-600">"{{ student.name }}"</span>?
+      </p>
+
+      <form method="post" class="flex justify-center gap-6">
+        {% csrf_token %}
+        <button type="submit"
+                class="bg-red-600 hover:bg-red-700 text-white font-medium px-6 py-2 rounded-lg shadow transition duration-200">
+          Yes, Delete
+        </button>
+        <a href="{% url 'student_list' %}"
+           class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-6 py-2 rounded-lg shadow transition duration-200">
+          Cancel
+        </a>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        secondary: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 font-sans">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="hidden md:flex md:flex-shrink-0">
+            <div class="flex flex-col w-64 border-r border-gray-200 bg-white">
+                <div class="flex items-center justify-center h-16 px-4 border-b border-gray-200">
+                    <div class="flex items-center">
+                        <i class="fas fa-chalkboard-teacher text-primary-600 text-2xl mr-2"></i>
+                        <span class="text-xl font-semibold text-gray-800">Institute of Dynamic Learning</span>
+                    </div>
+                </div>
+                <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
+                    <!-- User Profile -->
+                    <div class="flex items-center px-2 py-4 border-b border-gray-200">
+                        <img class="w-10 h-10 rounded-full object-cover" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Teacher profile">
+                        <div class="ml-3">
+                        {% if user.is_authenticated %}
+                          <p class="text-lg font-semibold">Welcome, {{ name }}</p>
+                        {% endif %}
+                            <p class="text-xs font-medium text-gray-500">{{role}}</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation -->
+                    <nav class="mt-6">
+                        <div>
+                            <a href="#" class="flex items-center px-2 py-3 text-sm font-medium rounded-lg text-white bg-primary-600 group">
+                                <i class="fas fa-tachometer-alt mr-3 text-primary-100"></i>
+                                Dashboard
+                            </a>
+                            
+                            <a href="/teacher-birthdays" class="flex items-center px-2 py-3 mt-1 text-sm font-medium rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-600 group">
+                                <i class="fas fa-birthday-cake mr-3 text-gray-500 group-hover:text-primary-500"></i>
+                                Birthdays
+                            </a>
+                            
+                            <a href="/teacher-events" class="flex items-center px-2 py-3 mt-1 text-sm font-medium rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-600 group">
+                                <i class="fas fa-calendar-alt mr-3 text-gray-500 group-hover:text-primary-500"></i>
+                                Events
+                            </a>
+                            
+                            <a href="/results" class="flex items-center px-2 py-3 mt-1 text-sm font-medium rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-600 group">
+                                <i class="fas fa-chart-line mr-3 text-gray-500 group-hover:text-primary-500"></i>
+                                Results
+                            </a>
+                            
+                            <a href="/teacher-fee" class="flex items-center px-2 py-3 mt-1 text-sm font-medium rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-600 group">
+                                <i class="fas fa-money-bill-wave mr-3 text-gray-500 group-hover:text-primary-500"></i>
+                                Fee Details
+                            </a>
+                            
+                            <a href="/teachers-attendance-list" class="flex items-center px-2 py-3 mt-1 text-sm font-medium rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-600 group">
+                                <i class="fas fa-clipboard-check mr-3 text-gray-500 group-hover:text-primary-500"></i>
+                                Attendance
+                            </a>
+                            
+                            <a href="/teacher-diary" class="flex items-center px-2 py-3 mt-1 text-sm font-medium rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-600 group">
+                                <i class="fas fa-book mr-3 text-gray-500 group-hover:text-primary-500"></i>
+                                Diary
+                            </a>
+                        </div>
+                        
+                        <!-- Secondary Navigation -->
+                        <div class="mt-10">
+                            <p class="px-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Tools</p>
+                            <a href="/teacher-dashboard-settings" class="flex items-center px-2 py-3 mt-1 text-sm font-medium rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-600 group">
+                                <i class="fas fa-cog mr-3 text-gray-500 group-hover:text-primary-500"></i>
+                                Settings
+                            </a>
+                            <a href="/help" class="flex items-center px-2 py-3 mt-1 text-sm font-medium rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-600 group">
+                                <i class="fas fa-question-circle mr-3 text-gray-500 group-hover:text-primary-500"></i>
+                                Help
+                            </a>
+                        </div>
+                    </nav>
+                </div>
+                
+                <!-- Sidebar Footer -->
+                <div class="p-4 border-t border-gray-200">
+                    <a href='/login ' class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                        <i class="fas fa-sign-out-alt mr-2"></i>
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile sidebar -->
+        <div class="md:hidden fixed inset-0 z-40">
+            <div class="fixed inset-0 bg-gray-600 bg-opacity-75" aria-hidden="true"></div>
+            <div class="relative flex flex-col w-full max-w-xs bg-white">
+                <div class="flex items-center justify-between h-16 px-4 border-b border-gray-200">
+                    <div class="flex items-center">
+                        <i class="fas fa-chalkboard-teacher text-primary-600 text-2xl mr-2"></i>
+                        <span class="text-xl font-semibold text-gray-800">EduManage</span>
+                    </div>
+                    <button class="text-gray-500 hover:text-gray-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
+                    <!-- Mobile navigation would go here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="flex flex-col flex-1 overflow-hidden">
+            <!-- Top Navigation -->
+            <header class="flex items-center justify-between h-16 px-4 border-b border-gray-200 bg-white">
+                <div class="flex items-center">
+                    <button class="md:hidden text-gray-500 hover:text-gray-600 mr-2">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="text-lg font-semibold text-gray-800">Teacher Dashboard</h1>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button class="p-1 text-gray-500 rounded-full hover:bg-gray-100 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <button class="p-1 text-gray-500 rounded-full hover:bg-gray-100 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                        <i class="fas fa-envelope"></i>
+                    </button>
+                    <div class="relative">
+                        <button class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500">
+                            <img class="w-8 h-8 rounded-full" src="https://randomuser.me/api/portraits/women/44.jpg" alt="User profile">
+                        </button>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Main Content Area -->
+            <main class="flex-1 overflow-auto p-4 bg-gray-50">
+                <!-- Welcome Banner -->
+                <div class="bg-gradient-to-r from-primary-500 to-primary-700 rounded-xl p-6 mb-6 text-white shadow-lg">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                        <div>
+                            <h2 class="text-2xl font-bold">Good Morning, {{name}}!</h2>
+                            <p class="mt-2 opacity-90">You have 3 classes today. Next class starts at 10:30 AM</p>
+                        </div>
+                        <div class="mt-4 md:mt-0">
+                            <button class="px-4 py-2 bg-white text-primary-600 rounded-lg font-medium hover:bg-opacity-90 transition duration-150">
+                                View Today's Schedule
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div class="bg-white rounded-xl shadow p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-lg bg-primary-100 text-primary-600 mr-4">
+                                <i class="fas fa-users text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Total Students</p>
+                                <p class="text-2xl font-semibold text-gray-800">{{total_students}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-lg bg-green-100 text-green-600 mr-4">
+                                <i class="fas fa-clipboard-check text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Attendance Today</p>
+                                <p class="text-2xl font-semibold text-gray-800">92%</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-lg bg-yellow-100 text-yellow-600 mr-4">
+                                <i class="fas fa-tasks text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-500"> Average Results</p>
+                                <p class="text-2xl font-semibold text-gray-800">{{average_percentage}} %</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-lg bg-purple-100 text-purple-600 mr-4">
+                                <i class="fas fa-calendar-day text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Upcoming Events</p>
+                                <p class="text-2xl font-semibold text-gray-800">{{upcoming_events}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Main Content Sections -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <!-- Birthdays Section -->
+                    <div class="lg:col-span-1 bg-white rounded-xl shadow overflow-hidden">
+
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-gray-800">
+                                    <i class="fas fa-birthday-cake text-primary-600 mr-2"></i>
+                                    Upcoming Birthdays
+                                </h3>
+                                <a href="/teacher-birthdays" class="text-sm text-primary-600 hover:text-primary-700">View All</a>
+                            </div>
+                        </div>
+
+                        <div class="divide-y divide-gray-200">
+
+                            {% for sb in students_birthdays %}
+                            
+                            
+                            <div class="px-6 py-4 hover:bg-gray-50 transition duration-150">
+                              <div class="flex items-center">
+                                <img class="w-10 h-10 rounded-full object-cover" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQUxAX4bSM3kndg2rEQB-L3LUGXiahKW4S3w&s" alt="Student">
+                                <div class="ml-3">
+                                  <p class="text-sm font-medium text-gray-800">{{sb.name}}</p>
+                                  <p class="text-xs text-gray-500">{{sb.date_of_birth}}</p>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            {% endfor %}
+
+
+                        </div>
+                    </div>
+                    
+                    <!-- Events Section -->
+                    <div class="lg:col-span-2 bg-white rounded-xl shadow overflow-hidden">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-gray-800">
+                                    <i class="fas fa-calendar-alt text-primary-600 mr-2"></i>
+                                    Upcoming Events
+                                </h3>
+                                <a href="/teacher-events" class="text-sm text-primary-600 hover:text-primary-700">View All</a>
+                            </div>
+                        </div>
+                        <div class="divide-y divide-gray-200">
+
+                          {% for te in total_events %}
+                          
+                          
+                          <div class="px-6 py-4 hover:bg-gray-50 transition duration-150">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                              <div class="flex items-start">
+                                <div class="flex-shrink-0 mr-4 bg-green-100 text-green-600 rounded-lg p-2">
+                                  <i class="fas fa-graduation-cap text-xl"></i>
+                                </div>
+                                <div>
+                                  <p class="text-sm font-medium text-gray-800">{{te.title}}</p>
+                                  <p class="text-xs text-gray-500 mt-1">
+                                    <i class="far fa-clock mr-1"></i> {{te.start_date}} - {{te.end_date}}
+                                  </p>
+                                  <p class="text-xs text-gray-500 mt-1">
+                                    <i class="fas fa-map-marker-alt mr-1"></i> {{te.location}}
+                                  </p>
+                                </div>
+                              </div>
+                              <button class="mt-3 sm:mt-0 px-3 py-1 bg-primary-600 text-white text-xs font-medium rounded hover:bg-primary-700 transition duration-150">
+                                View Details
+                              </button>
+                            </div>
+                          </div>
+                          
+                          {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Results and Attendance Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- Results Section -->
+                    <div class="bg-white rounded-xl shadow overflow-hidden">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-gray-800">
+                                    <i class="fas fa-chart-line text-primary-600 mr-2"></i>
+                                    Recent Results
+                                </h3>
+                                <a href="/results" class="text-sm text-primary-600 hover:text-primary-700">View All</a>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recent Score</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+
+                                            {% for r in result %}
+                                            
+                                            
+                                            <tr>
+                                                <td class="px-3 py-3 whitespace-nowrap text-sm font-medium text-gray-800">{{r.exam_name}}</td>
+                                                <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">{{r.result_date}}</td>
+                                                <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">{{r.marks_obtained}}</td>
+                                            </tr>
+                                            
+                                            {% endfor %}
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="mt-4">
+                                <a href="/results/create" class="w-full px-4 py-2 border border-dashed border-gray-300 rounded-lg text-sm font-medium text-gray-600 hover:border-gray-400 hover:text-gray-700 transition duration-150">
+                                    <i class="fas fa-plus mr-2"></i> Add New Results
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Attendance Section -->
+                    <div class="bg-white rounded-xl shadow overflow-hidden">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-gray-800">
+                                    <i class="fas fa-clipboard-check text-primary-600 mr-2"></i>
+                                    Today's Attendance
+                                </h3>
+                                <a href="/students-attendance-list" class="text-sm text-primary-600 hover:text-primary-700">View All</a>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            
+                            {% comment %} Students Attendance Marked by Teachers {% endcomment %}
+
+                            {% for sa in students_attendance %}
+                            <div class="mb-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium text-gray-700">{{sa.student_name}}</span>
+                                    <span class="text-sm font-medium text-green-600">{{sa.date}}</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-green-600 h-2.5 rounded-full" style="width: 89%"></div>
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                            <div class="mt-4">
+                                <a href='/students-attendance-list' class="w-[100%] px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition duration-150">
+                                    <i class="fas fa-edit mr-2"></i> Mark Attendance
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Fee Details and Diary Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Fee Details Section -->
+                    <div class="bg-white rounded-xl shadow overflow-hidden">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-gray-800">
+                                    <i class="fas fa-money-bill-wave text-primary-600 mr-2"></i>
+                                    Fee Details
+                                </h3>
+                                <a href="/teacher-fee" class="text-sm text-primary-600 hover:text-primary-700">View All</a>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="mb-6">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-sm font-medium text-gray-700">Recent Fee Collections</span>
+                                    <span class="text-sm font-medium text-gray-700">Amount Paid</span>
+                                </div>
+
+                                {% for sf in student_fee %}
+                                <div class="space-y-3">
+                                        
+                                        <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-800">{{sf.student.name}}</p>
+                                                <p class="text-xs text-gray-500">{{sf.student.roll_no}}</p>
+                                            </div>
+                                            <span class="text-sm font-medium text-yellow-700">{{sf.amount_paid}}</span>
+                                        </div>
+                                        <div></div>
+                                        
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-green-50 rounded-lg p-4 text-center">
+                                    <p class="text-2xl font-bold text-green-600">{{fee_average_percentage}}</p>
+                                    <p class="text-xs font-medium text-gray-600">Fee Collected</p>
+                                </div>
+                                <div class="bg-blue-50 rounded-lg p-4 text-center">
+                                    <p class="text-2xl font-bold text-blue-600">₹{{total_pendng_fee}}</p>
+                                    <p class="text-xs font-medium text-gray-600">Total Pending</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Diary Section -->
+                    <div class="bg-white rounded-xl shadow overflow-hidden">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-gray-800">
+                                    <i class="fas fa-book text-primary-600 mr-2"></i>
+                                    Class Diary
+                                </h3>
+                                <a href="/teacher-diary" class="text-sm text-primary-600 hover:text-primary-700">View All</a>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="mb-6">
+                                {% for d in diaries %}
+                                    
+                                    <div class="flex items-start mb-4 p-3 bg-gray-50 rounded-lg">
+                                        <div class="flex-shrink-0 bg-green-100 text-green-600 rounded-lg p-2 mr-3">
+                                            <i class="fas fa-flask"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-800">{{d.title}}</p>
+                                            <p class="text-xs text-gray-500 mt-1">{{d.content}}</p>
+                                            <p class="text-xs text-gray-400 mt-1">Posted: {{d.date}}</p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+                            <div>
+                                <a href="/diary-create" class="w-full px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition duration-150">
+                                    <i class="fas fa-plus mr-2"></i> Add New Diary Entry
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,259 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Celebrations</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            celebration: {
+              50: '#fff9f5',
+              100: '#fff2e8',
+              200: '#ffe0c8',
+              300: '#ffc795',
+              400: '#ffa052',
+              500: '#fe7c21',
+              600: '#ef5f07',
+              700: '#c64808',
+              800: '#9d3a0f',
+              900: '#7e3210',
+            },
+            party: {
+              50: '#f5f3ff',
+              100: '#ede9fe',
+              200: '#ddd6fe',
+              300: '#c4b5fd',
+              400: '#a78bfa',
+              500: '#8b5cf6',
+              600: '#7c3aed',
+              700: '#6d28d9',
+              800: '#5b21b6',
+              900: '#4c1d95',
+            },
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'confetti': 'confetti 5s linear infinite',
+            'pulse-slow': 'pulse 6s infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-20px)' },
+            },
+            confetti: {
+              '0%': { transform: 'translateY(-100vh) rotate(0deg)', opacity: '1' },
+              '100%': { transform: 'translateY(100vh) rotate(360deg)', opacity: '0' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at top left, #fdf2ff, #f3f4ff);
+    }
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: #f00;
+      opacity: 0;
+    }
+    .birthday-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .birthday-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+    .birthday-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .birthday-card:hover::before {
+      opacity: 1;
+    }
+    .section-header {
+      position: relative;
+      display: inline-block;
+    }
+    .section-header::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #8b5cf6, #fe7c21);
+      border-radius: 3px;
+    }
+    .empty-state {
+      background: rgba(255,255,255,0.7);
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      border: 2px dashed rgba(139, 92, 246, 0.3);
+    }
+    .party-icon {
+      filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
+    }
+  </style>
+</head>
+<body class="min-h-screen py-10 px-4">
+  <!-- Confetti elements -->
+  <div id="confetti-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+  <div class="max-w-7xl mx-auto relative z-10">
+    <!-- Header -->
+    <div class="text-center mb-16 animate-float">
+      <div class="inline-block bg-gradient-to-r from-party-500 to-celebration-500 text-white px-6 py-3 rounded-full shadow-lg mb-4">
+        <a href="/teacher-dashboard">
+          <span class="text-sm font-semibold">Back to dashboard</span>
+        </a>
+      </div>
+      <div class="inline-block bg-gradient-to-r from-party-500 to-celebration-500 text-white px-6 py-3 rounded-full shadow-lg mb-4">
+        <span class="text-sm font-semibold">THIS MONTH'S CELEBRATION</span>
+      </div>
+      <h1 class="text-5xl font-bold text-gray-800 mb-4">
+        <span class="bg-clip-text text-transparent bg-gradient-to-r from-party-600 to-celebration-600">Happy Birthday!</span>
+      </h1>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+        Wishing a wonderful day to all our amazing teachers and students celebrating today!
+      </p>
+    </div>
+
+    <!-- Celebration Cards -->
+    <div class="grid grid-cols-1 lg:grid-cols-1 gap-8 mb-20">
+      <!-- Students Section -->
+      <div class="bg-white/50 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/20">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-3xl font-bold text-gray-800 section-header">
+            <i class="fas fa-user-graduate text-celebration-600 mr-3"></i>Students' Birthdays
+          </h2>
+          <div class="w-12 h-12 rounded-full bg-celebration-100 flex items-center justify-center">
+            <i class="fas fa-star text-celebration-600 text-xl"></i>
+          </div>
+        </div>
+        
+        {% if students %}
+          <div class="grid gap-5">
+            {% for student in students %}
+              <div class="birthday-card p-5 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-16 h-16 bg-celebration-500 opacity-10 rounded-bl-full"></div>
+                <div class="flex items-start space-x-4">
+                  <div class="flex-shrink-0">
+                    <div class="w-14 h-14 rounded-full bg-gradient-to-br from-celebration-400 to-celebration-600 flex items-center justify-center text-white text-2xl font-bold">
+                      {{ student.name|first|upper }}
+                    </div>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">{{ student.name }}</h3>
+                    <div class="flex items-center text-gray-600 text-sm mb-1">
+                      <i class="fas fa-id-card mr-2 text-celebration-500"></i>
+                      <span>Roll No: {{ student.roll_no }}</span>
+                    </div>
+                    <div class="flex items-center text-gray-600 text-sm mb-1">
+                      <i class="fas fa-envelope mr-2 text-celebration-500"></i>
+                      <span>{{ student.email }}</span>
+                    </div>
+                    <div class="mt-3 flex space-x-2">
+                      <span class="px-2 py-1 bg-celebration-100 text-celebration-800 text-xs font-medium rounded-full">Student</span>
+                      <span class="px-2 py-1 bg-party-100 text-party-800 text-xs font-medium rounded-full">Celebration</span>
+                    </div>
+                  </div>
+                  <button class="w-10 h-10 rounded-full bg-party-100 text-party-600 flex items-center justify-center hover:bg-party-200 transition">
+                    <i class="fas fa-birthday-cake"></i>
+                  </button>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="empty-state">
+            <div class="w-20 h-20 mx-auto mb-4 bg-celebration-100 rounded-full flex items-center justify-center text-celebration-500">
+              <i class="fas fa-book-open text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-medium text-gray-700 mb-2">No student birthdays today</h3>
+            <p class="text-gray-500">We'll celebrate together next time!</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+
+    <!-- Floating Celebration Icons -->
+    <div class="fixed bottom-10 right-10 z-20 space-y-4">
+      <button class="w-14 h-14 rounded-full bg-celebration-500 text-white flex items-center justify-center shadow-lg hover:bg-celebration-600 transition transform hover:scale-110 party-icon animate-pulse-slow">
+        <i class="fas fa-birthday-cake text-xl"></i>
+      </button>
+      <button class="w-14 h-14 rounded-full bg-party-500 text-white flex items-center justify-center shadow-lg hover:bg-party-600 transition transform hover:scale-110 party-icon animate-float" style="animation-delay: 0.5s">
+        <i class="fas fa-gift text-xl"></i>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Confetti animation
+    function createConfetti() {
+      const colors = ['#ff577f', '#ff884b', '#ffd384', '#94ebcd', '#6a67ce', '#fe7c21', '#8b5cf6'];
+      const container = document.getElementById('confetti-container');
+      
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.width = Math.random() * 10 + 5 + 'px';
+        confetti.style.height = Math.random() * 10 + 5 + 'px';
+        confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+        confetti.style.animationDelay = Math.random() * 5 + 's';
+        container.appendChild(confetti);
+      }
+    }
+    
+    // Create confetti on load
+    window.addEventListener('load', createConfetti);
+    
+    // Floating celebration icons animation
+    const partyIcons = document.querySelectorAll('.party-icon');
+    partyIcons.forEach((icon, index) => {
+      icon.style.animationDelay = `${index * 0.2}s`;
+    });
+    
+    // Birthday card hover effect enhancement
+    const birthdayCards = document.querySelectorAll('.birthday-card');
+    birthdayCards.forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const x = e.pageX - card.getBoundingClientRect().left;
+        const y = e.pageY - card.getBoundingClientRect().top;
+        
+        card.style.setProperty('--mouse-x', x);
+        card.style.setProperty('--mouse-y', y);
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if event %}Edit{% else %}Create{% endif %} Event | TechSphere</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        tech: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        cyber: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            200: '#ddd6fe',
+                            300: '#c4b5fd',
+                            400: '#a78bfa',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                            800: '#5b21b6',
+                            900: '#4c1d95',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .form-container {
+            background: linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.03), 0 10px 10px -5px rgba(0, 0, 0, 0.01);
+            border: 1px solid rgba(226, 232, 240, 0.6);
+        }
+        .input-field {
+            transition: all 0.2s ease;
+            background-color: rgba(248, 250, 252, 0.8);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .input-field:focus {
+            border-color: #0ea5e9;
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+            background-color: white;
+        }
+        .form-label {
+            position: absolute;
+            left: 12px;
+            top: -8px;
+            background: white;
+            padding: 0 4px;
+            font-size: 0.75rem;
+            color: #64748b;
+            z-index: 10;
+        }
+        .input-group {
+            position: relative;
+        }
+        .datetime-icon::before {
+            content: '\f073';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl mx-auto animate-fade-in">
+        <!-- Form Header -->
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-tech-50 flex items-center justify-center text-tech-500 text-2xl">
+                <i class="fas fa-calendar-plus"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">
+                {% if event %}Update Event{% else %}Create New Event{% endif %}
+            </h1>
+            <p class="text-gray-500">
+                {% if event %}
+                    Modify your event details below
+                {% else %}
+                    Fill in the form to create a new event
+                {% endif %}
+            </p>
+        </div>
+
+        <!-- Event Form -->
+        <div class="form-container rounded-xl p-8">
+            <form method="post">
+                {% csrf_token %}
+                
+                <!-- Title Field -->
+                <div class="input-group mb-6">
+                    <label class="form-label">Event Title</label>
+                    <div class="relative">
+                        <i class="fas fa-heading absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" name="title" value="{{ event.title|default:'' }}" placeholder="Tech Conference 2023"
+                               class="input-field w-full pl-10 pr-4 py-3 rounded-lg" required>
+                    </div>
+                </div>
+                
+                <!-- Description Field -->
+                <div class="input-group mb-6">
+                    <label class="form-label">Description</label>
+                    <div class="relative">
+                        <i class="fas fa-align-left absolute left-3 top-4 text-gray-400"></i>
+                        <textarea name="description" rows="4" placeholder="Describe your event details..."
+                                  class="input-field w-full pl-10 pr-4 py-3 rounded-lg" required>{{ event.description|default:'' }}</textarea>
+                    </div>
+                </div>
+                
+                <!-- Location Field -->
+                <div class="input-group mb-6">
+                    <label class="form-label">Location</label>
+                    <div class="relative">
+                        <i class="fas fa-map-marker-alt absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" name="location" value="{{ event.location|default:'' }}" placeholder="Virtual or Physical Address"
+                               class="input-field w-full pl-10 pr-4 py-3 rounded-lg" required>
+                    </div>
+                </div>
+                
+                <!-- Date & Time Fields -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="input-group">
+                        <label class="form-label">Start Date & Time</label>
+                        <div class="relative datetime-icon">
+                            <input type="datetime-local" name="start_date" value="{{ event.start_date|date:'Y-m-d\\TH:i'|default:'' }}"
+                                   class="input-field w-full pl-4 pr-10 py-3 rounded-lg cursor-pointer" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label class="form-label">End Date & Time</label>
+                        <div class="relative datetime-icon">
+                            <input type="datetime-local" name="end_date" value="{{ event.end_date|date:'Y-m-d\\TH:i'|default:'' }}"
+                                   class="input-field w-full pl-4 pr-10 py-3 rounded-lg cursor-pointer" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Form Actions -->
+                <div class="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-100">
+                    <a href="{% url 'event_list' %}" class="px-6 py-3 bg-white text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm border border-gray-200 flex items-center justify-center">
+                        <i class="fas fa-times mr-2"></i> Cancel
+                    </a>
+                    <button type="submit" class="px-6 py-3 bg-tech-600 text-white font-medium rounded-lg hover:bg-tech-700 transition-colors shadow-sm flex items-center justify-center">
+                        {% if event %}
+                            <i class="fas fa-save mr-2"></i> Update Event
+                        {% else %}
+                            <i class="fas fa-plus-circle mr-2"></i> Create Event
+                        {% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Form Tips -->
+        <div class="mt-8 bg-blue-50/50 border border-blue-100 rounded-lg p-4">
+            <h3 class="flex items-center text-blue-800 font-medium mb-2">
+                <i class="fas fa-lightbulb mr-2"></i> Pro Tips
+            </h3>
+            <ul class="text-sm text-blue-700 space-y-1">
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle mt-1 mr-2 text-blue-500 text-xs"></i>
+                    Use clear, descriptive titles that stand out in listings
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle mt-1 mr-2 text-blue-500 text-xs"></i>
+                    Include all relevant details in the description
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle mt-1 mr-2 text-blue-500 text-xs"></i>
+                    Double-check date and time accuracy
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Enhance datetime inputs
+        document.querySelectorAll('input[type="datetime-local"]').forEach(input => {
+            // Add click handler to show custom picker if needed
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('ring-2', 'ring-tech-300');
+            });
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('ring-2', 'ring-tech-300');
+            });
+        });
+
+        // Form validation
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            const requiredFields = this.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('border-red-300', 'bg-red-50');
+                    isValid = false;
+                } else {
+                    field.classList.remove('border-red-300', 'bg-red-50');
+                }
+            });
+            
+            if (!isValid) {
+                e.preventDefault();
+                // You could add a toast notification here
+                alert('Please fill in all required fields');
+            }
+        });
+    </script>
+</body>
+</html>
